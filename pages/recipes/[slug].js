@@ -1,31 +1,34 @@
-import { recipes } from "@/lib/data";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { TagContainer } from "@/components/TagContainer";
 import { ChangeButton } from "@/components/Button";
-import styled from "styled-components";
+
 import { useState } from "react";
 import { CircleLink } from "@/components/Link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTimes,
+  faCartShopping,
+  faPlus,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
 
-export default function RecipeDetails() {
+export default function RecipeDetails({ recipes }) {
   const [display, setDisplay] = useState(true);
 
   const router = useRouter();
   const { slug } = router.query;
 
   const recipe = recipes.find((recipe) => recipe.slug === slug);
-  console.log(recipe);
-  console.log(recipe.ingredients[0].ingredient.name);
-  console.log("HALLO:", typeof recipe.ingredients[0].amount);
+
   const [portions, setPortions] = useState(recipe.portions);
 
   function handleChangeDisplay() {
-    console.log("TEST");
     setDisplay(!display);
   }
 
   function handleDecrementPortion() {
     setPortions(portions - 1);
-    console.log("ASDADSADS:", typeof recipe.portions, recipe.portions);
   }
   function handleIncrementPortion() {
     setPortions(portions + 1);
@@ -40,6 +43,7 @@ export default function RecipeDetails() {
           alt={recipe.name}
           width={400}
           height={400}
+          priority={true}
         ></Image>
         <ChangeButton display={display} onChangeDisplay={handleChangeDisplay}>
           Ingredients
@@ -55,13 +59,17 @@ export default function RecipeDetails() {
                 onClick={handleDecrementPortion}
                 disabled={portions <= 1}
               >
-                -
+                <FontAwesomeIcon icon={faMinus} />
               </button>
               <span>{portions} portions</span>
               <button type="button" onClick={handleIncrementPortion}>
-                +
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+              <button type="button">
+                <FontAwesomeIcon icon={faCartShopping} />
               </button>
             </div>
+            <h2>Groceries</h2>
             <table>
               {recipe.ingredients.map((item) => (
                 <tr key={item.id}>
@@ -73,11 +81,25 @@ export default function RecipeDetails() {
                 </tr>
               ))}
             </table>
+            {recipe.spices.length > 0 && (
+              <>
+                <h2>Spices</h2>
+                <TagContainer tag={recipe.spices} />
+              </>
+            )}
+            {recipe.sauces.length > 0 && (
+              <>
+                <h2>Sauces</h2>
+                <TagContainer tag={recipe.sauces} />
+              </>
+            )}
           </>
         ) : (
           <p>{recipe.preperation}</p>
         )}
-        <CircleLink href="/recipes">x</CircleLink>
+        <CircleLink $isCancel href="/recipes">
+          <FontAwesomeIcon icon={faTimes} />
+        </CircleLink>
       </main>
     </>
   );
