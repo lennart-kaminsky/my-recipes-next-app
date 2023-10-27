@@ -1,9 +1,11 @@
-import { StyledLink } from "@/components/Link";
+import { CircleLink, StyledLink } from "@/components/Link";
 import { recipes } from "@/lib/data";
 import Image from "next/image";
 import styled from "styled-components";
 import Navigation from "@/components/Navgation";
 import Header from "@/components/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function RecipesOverview() {
   return (
@@ -27,6 +29,9 @@ export default function RecipesOverview() {
             </RecipeCard>
           ))}
         </RecipeContainer>
+        <CircleLink href="/recipes/new-recipe">
+          <FontAwesomeIcon icon={faPlus} />
+        </CircleLink>
       </main>
     </>
   );

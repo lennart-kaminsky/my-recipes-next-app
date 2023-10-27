@@ -17,6 +17,7 @@ export default createGlobalStyle`
   :root {
     --primary-color: #fafafa;
     --primary-bg-color: #0c0d1c;
+    --secondary-bg-color: #1e294d;
   }
 
   body {
