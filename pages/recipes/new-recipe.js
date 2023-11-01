@@ -1,16 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import styled from "styled-components";
 import { uid } from "uid";
 import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
+import { CircleLink } from "@/components/Link";
 
 export default function NewRecipe({ recipes, handleAddRecipe }) {
   const [newIngredients, setNewIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState({
-    name: "",
     amount: "",
+
+    name: "",
     unit: "",
   });
 
@@ -21,6 +23,13 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
   const [currentSauce, setCurrentSauce] = useState("");
 
   const router = useRouter();
+
+  // function handleChangeIngredientAmount(event) {
+  //   setCurrentIngredient({
+  //     ...currentIngredient,
+  //     amount: event.target.value,
+  //   });
+  // }
 
   function handleChangeIngredient(event, key) {
     setCurrentIngredient({
@@ -40,7 +49,7 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
   function handleAddIngredient() {
     if (!currentIngredient.name || !currentIngredient.amount) return null;
     setNewIngredients([...newIngredients, { id: uid(), ...currentIngredient }]);
-    setCurrentIngredient({ name: "", amount: "", unit: "" });
+    setCurrentIngredient({ amount: "", name: "", unit: "" });
     console.log(newIngredients);
   }
 
@@ -81,11 +90,21 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
       image: {
         src: "/recources/images/default-recipe.jpeg",
       },
-      portions: formElements.portionsInput.value,
-      ingredients: newIngredients,
+      portions: Number(formElements.portionsInput.value),
+      ingredients: newIngredients.map((ingredient) => {
+        return {
+          amount: Number(ingredient.amount),
+          ingredient: {
+            id: ingredient.id,
+            name: ingredient.name,
+            unit: ingredient.unit,
+          },
+        };
+      }),
+
       spices: newSpices,
       sauces: newSauces,
-      preperation: formElements.preperationInput,
+      preperation: formElements.preperationInput.value,
     };
     console.log("neues Rezept", newRecipe);
     console.log("neues Zutatetb", newIngredients);
@@ -210,6 +229,9 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
           ))}
         </StyledTableBody>
       </table>
+      <CircleLink $isCancel href="/recipes" $secondaryColor>
+        <FontAwesomeIcon icon={faTimes} />
+      </CircleLink>
     </main>
   );
 }

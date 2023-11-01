@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import GlobalStyle from "../styles";
+import Layout from "@/components/Layout";
 
 import { initialRecipes } from "@/lib/data";
 
@@ -13,6 +15,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
+      <Layout />
       <Component
         {...pageProps}
         recipes={recipes}

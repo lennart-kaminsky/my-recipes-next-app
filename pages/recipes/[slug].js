@@ -1,17 +1,14 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { TagContainer } from "@/components/TagContainer";
 import { ChangeButton } from "@/components/Button";
 
 import { useState } from "react";
 import { CircleLink } from "@/components/Link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTimes,
-  faCartShopping,
-  faPlus,
-  faMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { StyledHeadlineOne } from "@/components/StyledText";
+import styled from "styled-components";
+import Ingredients from "@/components/Ingredients";
 
 export default function RecipeDetails({ recipes }) {
   const [display, setDisplay] = useState(true);
@@ -37,70 +34,93 @@ export default function RecipeDetails({ recipes }) {
   return (
     <>
       <main>
-        <h1>{recipe.name}</h1>
-        <Image
-          src={recipe.image.src}
-          alt={recipe.name}
-          width={400}
-          height={400}
-          priority={true}
-        ></Image>
-        <ChangeButton display={display} onChangeDisplay={handleChangeDisplay}>
-          Ingredients
-        </ChangeButton>
-        <ChangeButton display={!display} onChangeDisplay={handleChangeDisplay}>
-          Preperation
-        </ChangeButton>
+        <RelativeContainer>
+          <ShadowContainer>
+            <StyledHeadlineOne $isRecipeDetail>{recipe.name}</StyledHeadlineOne>
+          </ShadowContainer>
+          <DetailsImage
+            src={recipe.image.src}
+            alt={recipe.name}
+            width={1080}
+            height={1080}
+            priority={true}
+          ></DetailsImage>
+          <ChangeButtonContainer>
+            <ChangeButton
+              left
+              display={display}
+              onChangeDisplay={handleChangeDisplay}
+            >
+              Ingredients
+            </ChangeButton>
+            <ChangeButton
+              display={!display}
+              onChangeDisplay={handleChangeDisplay}
+            >
+              Preperation
+            </ChangeButton>
+          </ChangeButtonContainer>
+          <CircleLink $isCancel href="/recipes">
+            <FontAwesomeIcon icon={faTimes} />
+          </CircleLink>
+          <CircleLink $isEdit href="/recipes">
+            <FontAwesomeIcon icon={faEllipsis} />
+          </CircleLink>
+        </RelativeContainer>
         {display ? (
-          <>
-            <div>
-              <button
-                type="button"
-                onClick={handleDecrementPortion}
-                disabled={portions <= 1}
-              >
-                <FontAwesomeIcon icon={faMinus} />
-              </button>
-              <span>{portions} portions</span>
-              <button type="button" onClick={handleIncrementPortion}>
-                <FontAwesomeIcon icon={faPlus} />
-              </button>
-              <button type="button">
-                <FontAwesomeIcon icon={faCartShopping} />
-              </button>
-            </div>
-            <h2>Groceries</h2>
-            <table>
-              {recipe.ingredients.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.ingredient.name}</td>
-                  <td>
-                    {(portions * item.amount) / recipe.portions +
-                      item.ingredient.unit}
-                  </td>
-                </tr>
-              ))}
-            </table>
-            {recipe.spices.length > 0 && (
-              <>
-                <h2>Spices</h2>
-                <TagContainer tag={recipe.spices} />
-              </>
-            )}
-            {recipe.sauces.length > 0 && (
-              <>
-                <h2>Sauces</h2>
-                <TagContainer tag={recipe.sauces} />
-              </>
-            )}
-          </>
+          <Ingredients
+            portions={portions}
+            recipe={recipe}
+            handleDecrementPortion={handleDecrementPortion}
+            handleIncrementPortion={handleIncrementPortion}
+          />
         ) : (
-          <p>{recipe.preperation}</p>
+          <StyledPreperation>
+            {!recipe.preperation
+              ? "No Preperation added yet 😾"
+              : recipe.preperation}
+          </StyledPreperation>
         )}
-        <CircleLink $isCancel href="/recipes">
-          <FontAwesomeIcon icon={faTimes} />
-        </CircleLink>
       </main>
     </>
   );
 }
+
+const DetailsImage = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const RelativeContainer = styled.div`
+  position: relative;
+  height: 45%;
+`;
+
+const ChangeButtonContainer = styled.div`
+  position: absolute;
+  width: 80%;
+  max-width: 450px;
+  margin-block: 20px;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%);
+`;
+
+const ShadowContainer = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    to top,
+    rgba(18, 18, 22, 15%),
+    rgba(18, 18, 22, 90%)
+  );
+`;
+
+const StyledPreperation = styled.p`
+  margin: 5%;
+`;

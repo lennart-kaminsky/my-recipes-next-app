@@ -1,19 +1,13 @@
 import { CircleLink, StyledLink } from "@/components/Link";
-import { initialRecipes } from "@/lib/data";
 import Image from "next/image";
 import styled from "styled-components";
-import Navigation from "@/components/Navgation";
-import Header from "@/components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function RecipesOverview({ recipes }) {
   return (
     <>
-      <Header></Header>
-      <Navigation></Navigation>
       <main>
-        <h2>All Recipes</h2>
         <RecipeContainer>
           {recipes.map((recipe) => (
             <RecipeCard key={recipe.id}>
@@ -22,8 +16,8 @@ export default function RecipesOverview({ recipes }) {
                 <CardImage
                   src={recipe.image.src}
                   alt={recipe.name}
-                  width={144}
-                  height={144}
+                  width={250}
+                  height={250}
                   priority={true}
                 ></CardImage>
               </StyledLink>
@@ -49,8 +43,8 @@ const RecipeCard = styled.li`
   position: relative;
   border-radius: 1rem;
   width: 40%;
-  max-width: 11rem;
-  height: 11rem;
+  max-width: 150px;
+  height: 180px;
   text-align: center;
 `;
 
@@ -59,20 +53,20 @@ const CardHeadline = styled.h3`
   position: absolute;
   top: 0;
   margin: 0;
-  padding: 0.5rem;
+  padding: 15px 0;
   width: 100%;
-  height: 40%;
+  height: 50%;
   background-image: linear-gradient(
     to top,
-    rgba(18, 18, 22, 30%),
+    rgba(18, 18, 22, 10%),
     rgba(18, 18, 22, 90%)
   );
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 20px 20px 0 0;
 `;
 
 const CardImage = styled(Image)`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 1rem;
+  border-radius: 20px;
 `;

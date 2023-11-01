@@ -12,7 +12,7 @@ export function TagContainer({ tag }) {
 const StyledTagContainer = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.8rem;
 `;
 
 const Tag = styled.li`

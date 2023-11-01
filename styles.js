@@ -1,11 +1,13 @@
 import { createGlobalStyle } from "styled-components";
 
 import { Poppins } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
 
 const poppins = Poppins({ subsets: ["latin"], weight: "400" });
+const poppinsSemiBold = Poppins({ subsets: ["latin"], weight: "600" });
 
 export default createGlobalStyle`
   *,
@@ -15,14 +17,26 @@ export default createGlobalStyle`
   }
 
   :root {
+    //Colors
     --primary-color: #fafafa;
-    --primary-bg-color: #0c0d1c;
-    --secondary-bg-color: #1e294d;
+    --secondary-color: #b4f569;
+    --primary-bg-color: #14151a;
+    --secondary-bg-color: #101114;
+
+    //Fonts
+    --font-regular: ${poppins.style.fontFamily};
+    --font-semi-bold: ${poppinsSemiBold.style.fontFamily};
+    
+  }
+
+  html {
+    font-size: 14px;
   }
 
   body {
     margin: 0;
     font-family: ${poppins.style.fontFamily};
+    
     color: var(--primary-color);
     background-color: var(--primary-bg-color);
   }
@@ -54,7 +68,7 @@ export default createGlobalStyle`
   main {
     grid-area: main;
     overflow: auto;
-    margin-inline: 1rem;
+    /* margin-inline: 1rem; */
   }
 
   nav {

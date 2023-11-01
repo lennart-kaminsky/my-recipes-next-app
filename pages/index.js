@@ -1,7 +1,6 @@
+import Header from "@/components/Header";
+import Navigation from "@/components/Navgation";
+
 export default function HomePage() {
-  return (
-    <>
-      <h1>My Recipes</h1>
-    </>
-  );
+  return <></>;
 }

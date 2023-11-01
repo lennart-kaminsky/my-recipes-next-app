@@ -9,27 +9,30 @@ import {
 import styled from "styled-components";
 import { StyledLink } from "../Link";
 
-export default function Navigation() {
+export default function Navigation({ currentPage }) {
   return (
     <nav>
       <NavigationList>
         <li>
-          <StyledLink href="/">
+          <StyledLink $current={currentPage === "/"} href="/">
             <FontAwesomeIcon icon={faHome} />
           </StyledLink>
         </li>
         <li>
-          <StyledLink href="/recipes">
+          <StyledLink $current={currentPage === "/recipes"} href="/recipes">
             <FontAwesomeIcon icon={faBurger} />
           </StyledLink>
         </li>
         <li>
-          <StyledLink href="/drugstore">
+          <StyledLink $current={currentPage === "/drugstore"} href="/drugstore">
             <FontAwesomeIcon icon={faToiletPaper} />
           </StyledLink>
         </li>
         <li>
-          <StyledLink href="/shopping-list">
+          <StyledLink
+            $current={currentPage === "/shopping-list"}
+            href="/shopping-list"
+          >
             <FontAwesomeIcon icon={faCartShopping} />
           </StyledLink>
         </li>
@@ -43,6 +46,7 @@ const NavigationList = styled.ul`
   padding: 0.7rem;
   border-top: 1px solid var(--primary-color);
   font-size: 1.5rem;
+  background-color: var(--secondary-bg-color);
   display: flex;
   justify-content: space-around;
   align-items: center;
