@@ -10,7 +10,11 @@ import { StyledHeadlineOne } from "@/components/StyledText";
 import styled from "styled-components";
 import Ingredients from "@/components/Ingredients";
 
-export default function RecipeDetails({ recipes, handleToggleFavorite }) {
+export default function RecipeDetails({
+  recipes,
+  handleToggleFavorite,
+  handleAddToList,
+}) {
   const [display, setDisplay] = useState(true);
 
   const router = useRouter();
@@ -71,6 +75,7 @@ export default function RecipeDetails({ recipes, handleToggleFavorite }) {
             handleDecrementPortion={handleDecrementPortion}
             handleIncrementPortion={handleIncrementPortion}
             onToggleFavorite={handleToggleFavorite}
+            onAddToList={handleAddToList}
           />
         ) : (
           <StyledPreperation>

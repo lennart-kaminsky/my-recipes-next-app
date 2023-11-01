@@ -21,6 +21,7 @@ export default function Ingredients({
   handleDecrementPortion,
   handleIncrementPortion,
   onToggleFavorite,
+  onAddToList,
 }) {
   return (
     <IngredientsContainer>
@@ -40,7 +41,7 @@ export default function Ingredients({
         <PortionsButton
           $single
           type="button"
-          onClick={() => console.log("add to shopping list")}
+          onClick={() => onAddToList(recipe.ingredients)}
         >
           <FontAwesomeIcon icon={faCartShopping} />
         </PortionsButton>
