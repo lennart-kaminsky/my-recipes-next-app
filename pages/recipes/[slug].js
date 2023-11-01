@@ -10,7 +10,7 @@ import { StyledHeadlineOne } from "@/components/StyledText";
 import styled from "styled-components";
 import Ingredients from "@/components/Ingredients";
 
-export default function RecipeDetails({ recipes }) {
+export default function RecipeDetails({ recipes, handleToggleFavorite }) {
   const [display, setDisplay] = useState(true);
 
   const router = useRouter();
@@ -63,9 +63,6 @@ export default function RecipeDetails({ recipes }) {
           <CircleLink $isCancel href="/recipes">
             <FontAwesomeIcon icon={faTimes} />
           </CircleLink>
-          <CircleLink $isEdit href="/recipes">
-            <FontAwesomeIcon icon={faEllipsis} />
-          </CircleLink>
         </RelativeContainer>
         {display ? (
           <Ingredients
@@ -73,6 +70,7 @@ export default function RecipeDetails({ recipes }) {
             recipe={recipe}
             handleDecrementPortion={handleDecrementPortion}
             handleIncrementPortion={handleIncrementPortion}
+            onToggleFavorite={handleToggleFavorite}
           />
         ) : (
           <StyledPreperation>

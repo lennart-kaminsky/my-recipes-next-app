@@ -101,7 +101,7 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
           },
         };
       }),
-
+      isFavorite: false,
       spices: newSpices,
       sauces: newSauces,
       preperation: formElements.preperationInput.value,

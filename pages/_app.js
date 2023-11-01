@@ -12,6 +12,17 @@ export default function App({ Component, pageProps }) {
     setRecipes([...recipes, newRecipe]);
   }
 
+  function handleToggleFavorite(id) {
+    setRecipes(
+      recipes.map((recipe) =>
+        recipe.id === id
+          ? { ...recipe, isFavorite: !recipe.isFavorite }
+          : recipe
+      )
+    );
+  }
+  console.log("RECEPIES", recipes);
+
   return (
     <>
       <GlobalStyle />
@@ -20,6 +31,7 @@ export default function App({ Component, pageProps }) {
         {...pageProps}
         recipes={recipes}
         handleAddRecipe={handleAddRecipe}
+        handleToggleFavorite={handleToggleFavorite}
       />
     </>
   );

@@ -5,6 +5,8 @@ import {
   faCartShopping,
   faMinus,
   faPlus,
+  faEllipsis,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { TagContainer } from "../TagContainer";
@@ -18,10 +20,11 @@ export default function Ingredients({
   recipe,
   handleDecrementPortion,
   handleIncrementPortion,
+  onToggleFavorite,
 }) {
   return (
     <IngredientsContainer>
-      <FlexRowWrapper $gap>
+      <FlexRowWrapper $spaceBetween $gap>
         <PortionsRegulator>
           <PortionsButton
             onClick={handleDecrementPortion}
@@ -34,8 +37,27 @@ export default function Ingredients({
             <FontAwesomeIcon icon={faPlus} />
           </PortionsButton>
         </PortionsRegulator>
-        <PortionsButton $single type="button">
+        <PortionsButton
+          $single
+          type="button"
+          onClick={() => console.log("add to shopping list")}
+        >
           <FontAwesomeIcon icon={faCartShopping} />
+        </PortionsButton>
+        <PortionsButton
+          $single
+          $isFavorite={!recipe.isFavorite}
+          type="button"
+          onClick={() => onToggleFavorite(recipe.id)}
+        >
+          <FontAwesomeIcon icon={faHeart} />
+        </PortionsButton>
+        <PortionsButton
+          $single
+          type="button"
+          onClick={() => console.log("edit recipe")}
+        >
+          <FontAwesomeIcon icon={faEllipsis} />
         </PortionsButton>
       </FlexRowWrapper>
       <StyledHeadlineTwo>Groceries</StyledHeadlineTwo>
@@ -63,9 +85,10 @@ const IngredientsContainer = styled.div`
 
 const PortionsRegulator = styled.div`
   width: 50%;
+  font-size: 0.8rem;
   display: flex;
   justify-content: space-between;
   padding-block: 10px;
   background-color: var(--secondary-bg-color);
-  border-radius: 20px;
+  border-radius: 10px;
 `;

@@ -13,9 +13,16 @@ export function ChangeButton({ display, children, onChangeDisplay, left }) {
   );
 }
 
-export function PortionsButton({ onClick, children, disabled, $single }) {
+export function PortionsButton({
+  onClick,
+  children,
+  disabled,
+  $single,
+  $isFavorite,
+}) {
   return (
     <StyledPortionsButton
+      $isFavorite={$isFavorite}
       $single={$single}
       type="button"
       onClick={onClick}
@@ -44,13 +51,14 @@ const StyledChangeButton = styled.button`
 const StyledPortionsButton = styled.button`
   border: none;
   background: none;
-  color: var(--secondary-color);
+  color: ${({ $isFavorite }) =>
+    $isFavorite ? "var(--primary-color)" : "var(--secondary-color)"};
   padding-inline: 15px;
   ${({ $single }) =>
     $single &&
     css`
-      padding: 10px 20px;
+      padding-inline: 20px;
       background-color: var(--secondary-bg-color);
-      border-radius: 30px;
+      border-radius: 20px;
     `}
 `;

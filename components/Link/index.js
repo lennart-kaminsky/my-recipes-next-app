@@ -17,7 +17,7 @@ export const CircleLink = styled(Link)`
   border-radius: 100%;
   position: absolute;
 
-  ${({ $isAddRecipe, $isCancel, $isEdit }) => {
+  ${({ $isAddRecipe, $isCancel }) => {
     if ($isAddRecipe)
       return css`
         padding: 0.25rem 0.62rem;
@@ -31,13 +31,6 @@ export const CircleLink = styled(Link)`
         padding: 0.25rem 0.7rem;
         top: 1.5rem;
         right: 1.5rem;
-      `;
-    if ($isEdit)
-      return css`
-        background-color: var(--secondary-color);
-        padding: 0.25rem 0.55rem;
-        top: 1.5rem;
-        left: 1.5rem;
       `;
   }}
 `;
