@@ -209,8 +209,8 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
         </fieldset>
         <button type="submit">Submit</button>
       </form>
-      <TagContainer tag={newSpices} />
-      <TagContainer tag={newSauces} />
+      <TagContainer tag={newSpices} onRemove={handleRemoveSpice} isEdit />
+      <TagContainer tag={newSauces} onRemove={handleRemoveSauce} isEdit />
       <table>
         <StyledTableBody>
           {newIngredients.map((ingredient) => (
