@@ -20,8 +20,12 @@ export default createGlobalStyle`
     //Colors
     --primary-color: #fafafa;
     --secondary-color: #b4f569;
-    --primary-bg-color: #14151a;
-    --secondary-bg-color: #101114;
+    --secondary-bg-color: #0d0d0d;
+    --third-bg-color: #1b1b1c;
+    /* --secondary-bg-color: #101114; */
+    /* --secondary-bg-color: #0d0d0d; */
+    /* --secondary-bg-color: #101112; */
+    --primary-bg-color: #121212;
 
     //Fonts
     --font-regular: ${poppins.style.fontFamily};
