@@ -4,6 +4,7 @@ import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 
 import { initialRecipes } from "@/lib/data";
+import Loading from "./loading";
 
 export default function App({ Component, pageProps }) {
   const [recipes, setRecipes] = useState(initialRecipes);

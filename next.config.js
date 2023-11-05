@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   compiler: {
     styledComponents: true,
   },
   images: {
-    domains: ["biancazapatka.com"],
+    domains: ["biancazapatka.com", "oaidalleapiprodscus.blob.core.windows.net"],
   },
   reactStrictMode: true,
   webpack(config) {

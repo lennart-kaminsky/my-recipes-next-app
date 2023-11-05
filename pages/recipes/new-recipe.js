@@ -7,7 +7,7 @@ import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
 import { CircleLink } from "@/components/Link";
 
-export default function NewRecipe({ recipes, handleAddRecipe }) {
+export default function NewRecipe({ handleAddRecipe }) {
   const [newIngredients, setNewIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState({
     amount: "",
@@ -23,13 +23,6 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
   const [currentSauce, setCurrentSauce] = useState("");
 
   const router = useRouter();
-
-  // function handleChangeIngredientAmount(event) {
-  //   setCurrentIngredient({
-  //     ...currentIngredient,
-  //     amount: event.target.value,
-  //   });
-  // }
 
   function handleChangeIngredient(event, key) {
     setCurrentIngredient({
@@ -79,16 +72,23 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
     setNewSauces(newSauces.filter((sauce) => sauce.id !== id));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
     const formElements = event.target.elements;
     const recipeName = formElements.recipeNameInput.value;
+
+    const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
+    const data = await response.json();
+
+    console.log(data);
+
     const newRecipe = {
       id: uid(),
       name: recipeName,
       slug: kebabCase(recipeName),
       image: {
-        src: "/recources/images/default-recipe.jpeg",
+        src: data.data[0].url,
       },
       portions: Number(formElements.portionsInput.value),
       ingredients: newIngredients.map((ingredient) => {
@@ -113,6 +113,7 @@ export default function NewRecipe({ recipes, handleAddRecipe }) {
 
     router.push("/recipes");
   }
+
   function kebabCase(string) {
     return string
       .match(
