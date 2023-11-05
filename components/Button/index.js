@@ -18,11 +18,11 @@ export function PortionsButton({
   children,
   disabled,
   $single,
-  $isFavorite,
+  $isHighlighted,
 }) {
   return (
     <StyledPortionsButton
-      $isFavorite={$isFavorite}
+      $isHighlighted={$isHighlighted}
       $single={$single}
       type="button"
       onClick={onClick}
@@ -33,6 +33,10 @@ export function PortionsButton({
   );
 }
 
+export function ButtonNoStyle({ children, onClick }) {
+  return <ButtonNotStyled onClick={onClick}>{children}</ButtonNotStyled>;
+}
+
 const StyledChangeButton = styled.button`
   width: 50%;
   padding: 15px 0;
@@ -40,7 +44,6 @@ const StyledChangeButton = styled.button`
   font-size: 1.3rem;
   color: white;
   border: none;
-  /* border-radius: 10px 0 0 10px; */
   border-radius: ${({ $left }) => ($left ? "10px 0 0 10px" : "0 10px 10px 0")};
   &:disabled {
     color: var(--secondary-color);
@@ -51,8 +54,8 @@ const StyledChangeButton = styled.button`
 const StyledPortionsButton = styled.button`
   border: none;
   background: none;
-  color: ${({ $isFavorite }) =>
-    $isFavorite ? "var(--primary-color)" : "var(--secondary-color)"};
+  color: ${({ $isHighlighted }) =>
+    $isHighlighted ? "var(--primary-color)" : "var(--secondary-color)"};
   padding-inline: 15px;
   ${({ $single }) =>
     $single &&
@@ -61,4 +64,10 @@ const StyledPortionsButton = styled.button`
       background-color: var(--secondary-bg-color);
       border-radius: 20px;
     `}
+`;
+
+const ButtonNotStyled = styled.button`
+  border: none;
+  background: none;
+  color: var(--secondary-color);
 `;

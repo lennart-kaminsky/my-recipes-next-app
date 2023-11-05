@@ -1,13 +1,16 @@
+import { useState } from "react";
+
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { ChangeButton } from "@/components/Button";
 
-import { useState } from "react";
-import { CircleLink } from "@/components/Link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { StyledHeadlineOne } from "@/components/StyledText";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
 import styled from "styled-components";
+import { ChangeButton } from "@/components/Button";
+import { CircleLink } from "@/components/Link";
+import { StyledHeadlineOne } from "@/components/StyledText";
+
 import Ingredients from "@/components/Ingredients";
 
 export default function RecipeDetails({
@@ -21,7 +24,6 @@ export default function RecipeDetails({
   const { slug } = router.query;
 
   const recipe = recipes.find((recipe) => recipe.slug === slug);
-
   const [portions, setPortions] = useState(recipe.portions);
 
   function handleChangeDisplay() {

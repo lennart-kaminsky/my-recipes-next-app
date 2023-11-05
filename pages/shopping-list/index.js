@@ -1,9 +1,29 @@
-export default function ShoppingList({ shoppingList }) {
+import { ShoppingList } from "@/components/List";
+
+export default function List({
+  shoppingList,
+  handleToggleOnList,
+  handleRemoveFromList,
+  shoppingHistory,
+}) {
+  console.log("shoppingList", shoppingList);
+  console.log("shoppingHistory", shoppingHistory);
   return (
-    <ul>
-      {shoppingList.map((item) => (
-        <li key={item.ingredient.id}>{item.ingredient.name}</li>
-      ))}
-    </ul>
+    <main>
+      <ShoppingList
+        shoppingList={shoppingList}
+        onToggleOnList={handleToggleOnList}
+      ></ShoppingList>
+      <ShoppingList
+        onList
+        shoppingList={shoppingHistory}
+        onToggleOnList={handleToggleOnList}
+        handleRemoveFromList={handleRemoveFromList}
+      ></ShoppingList>
+
+      <button type="button" onClick={() => handleRemoveFromList("all")}>
+        Clear shopping history
+      </button>
+    </main>
   );
 }

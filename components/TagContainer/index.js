@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { ButtonNoStyle } from "../Button";
 
 export function TagContainer({ tag, onRemove, isEdit }) {
   return (
@@ -30,10 +31,4 @@ const Tag = styled.li`
   border: 1px solid var(--primary-color);
   border-radius: 0.9rem;
   padding: 0.3rem 0.5rem;
-`;
-
-const ButtonNoStyle = styled.button`
-  border: none;
-  background: none;
-  color: var(--secondary-color);
 `;

@@ -40,14 +40,15 @@ export default function Ingredients({
         </PortionsRegulator>
         <PortionsButton
           $single
+          $isHighlighted={!recipe.onList}
           type="button"
-          onClick={() => onAddToList(recipe.ingredients)}
+          onClick={() => onAddToList(recipe)}
         >
           <FontAwesomeIcon icon={faCartShopping} />
         </PortionsButton>
         <PortionsButton
           $single
-          $isFavorite={!recipe.isFavorite}
+          $isHighlighted={!recipe.isFavorite}
           type="button"
           onClick={() => onToggleFavorite(recipe.id)}
         >
