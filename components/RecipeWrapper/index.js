@@ -4,21 +4,21 @@ import styled from "styled-components";
 import { StyledLink } from "../Link";
 import useSWR from "swr";
 
-export default function RecipeWrapper({ recipes }) {
-  // const { data: recipes, isLoading, error } = useSWR("/api/recipes");
+export default function RecipeWrapper(/*{ recipes }*/) {
+  const { data: recipes, isLoading, error } = useSWR("/api/recipes");
 
-  // if (isLoading) return <h1>is loading...</h1>;
-  // if (error) return <h1>failed to get data...</h1>;
-  // console.log("-----!!!!!-----", recipes);
+  if (isLoading) return <h1>is loading...</h1>;
+  if (error) return <h1>failed to get data...</h1>;
+  console.log("-----!!!!!-----", recipes);
 
   return (
     <RecipeContainer>
       {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id}>
-          <StyledLink href={`/recipes/${recipe.slug}`}>
+        <RecipeCard key={recipe._id}>
+          <StyledLink href={`/recipes/${recipe._id}`}>
             <CardHeadline>{recipe.name}</CardHeadline>
             <CardImage
-              src={recipe.image.src}
+              src={recipe.image}
               alt={recipe.name}
               width={250}
               height={250}
