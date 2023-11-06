@@ -50,7 +50,7 @@ export default function Ingredients({
           $single
           $isHighlighted={!recipe.isFavorite}
           type="button"
-          onClick={() => onToggleFavorite(recipe.id)}
+          onClick={() => onToggleFavorite(recipe._id)}
         >
           <FontAwesomeIcon icon={faHeart} />
         </PortionsButton>

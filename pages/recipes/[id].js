@@ -12,20 +12,31 @@ import { CircleLink } from "@/components/Link";
 import { StyledHeadlineOne } from "@/components/StyledText";
 
 import Ingredients from "@/components/Ingredients";
+import useSWR from "swr";
 
 export default function RecipeDetails({
-  recipes,
+  //recipes,
   handleToggleFavorite,
   handleAddToList,
 }) {
   const [display, setDisplay] = useState(true);
 
   const router = useRouter();
-  const { slug } = router.query;
+  const { id } = router.query;
 
-  const recipe = recipes.find((recipe) => recipe.slug === slug);
+  // const recipe = recipes.find((recipe) => recipe.slug === slug);
+  //--------------------------------------
+  //
+  //
+  //
+  const { data: recipes, isLoading, error } = useSWR("/api/recipes");
+
+  const recipe = recipes.find((recipe) => recipe._id === id);
   const [portions, setPortions] = useState(recipe.portions);
-
+  console.log(recipe);
+  //
+  //
+  //------------------------------------------
   function handleChangeDisplay() {
     setDisplay(!display);
   }
@@ -37,6 +48,8 @@ export default function RecipeDetails({
     setPortions(portions + 1);
   }
 
+  // return <h1>{recipe.name}</h1>;
+
   return (
     <>
       <main>
@@ -45,7 +58,7 @@ export default function RecipeDetails({
             <StyledHeadlineOne $isRecipeDetail>{recipe.name}</StyledHeadlineOne>
           </ShadowContainer>
           <DetailsImage
-            src={recipe.image.src}
+            src={recipe.image}
             alt={recipe.name}
             width={1080}
             height={1080}

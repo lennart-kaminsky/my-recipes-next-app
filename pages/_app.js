@@ -25,36 +25,37 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleAddToList(items) {
-    if (items.ingredients.length > 1) {
-      const itemsNotInList = items.ingredients
-        .map((item) =>
-          //Item is not on in shoppinglist array:
-          !shoppingList.find(
-            (listItem) => listItem.ingredient.id === item.ingredient.id
-          ) ||
-          //Item is on shopping list but has onList="not" or "wasOnList":
-          shoppingList.find(
-            (listItem) =>
-              listItem.ingredient.id === item.ingredient.id && !listItem.onList
-          )
-            ? { ...item, onList: true }
-            : item
-        )
-        .filter((item) => item.onList);
-      console.log("to add:", itemsNotInList);
-      setShoppingList([
-        ...shoppingList.filter((item) => item.onList),
-        ...itemsNotInList,
-      ]);
+    // if (items.ingredients.length > 1) {
+    //   const itemsNotInList = items.ingredients
+    //     .map((item) =>
+    //       //Item is not on in shoppinglist array:
+    //       !shoppingList.find(
+    //         (listItem) => listItem.ingredient.id === item.ingredient.id
+    //       ) ||
+    //       //Item is on shopping list but has onList="not" or "wasOnList":
+    //       shoppingList.find(
+    //         (listItem) =>
+    //           listItem.ingredient.id === item.ingredient.id && !listItem.onList
+    //       )
+    //         ? { ...item, onList: true }
+    //         : item
+    //     )
+    //     .filter((item) => item.onList);
+    //   console.log("to add:", itemsNotInList);
+    //   setShoppingList([
+    //     ...shoppingList.filter((item) => item.onList),
+    //     ...itemsNotInList,
+    //   ]);
 
-      setRecipes(
-        recipes.map((recipe) =>
-          recipe.id === items.id ? { ...recipe, onList: true } : recipe
-        )
-      );
-    } else {
-      setShoppingList([...shoppingList, items.ingredients]);
-    }
+    //   setRecipes(
+    //     recipes.map((recipe) =>
+    //       recipe.id === items.id ? { ...recipe, onList: true } : recipe
+    //     )
+    //   );
+    // } else {
+    //   setShoppingList([...shoppingList, items.ingredients]);
+    // }
+    console.log("Ich werde etwas zur Liste adden :)");
   }
 
   function handleToggleOnList(id) {
@@ -94,13 +95,14 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleToggleFavorite(id) {
-    setRecipes(
-      recipes.map((recipe) =>
-        recipe.id === id
-          ? { ...recipe, isFavorite: !recipe.isFavorite }
-          : recipe
-      )
-    );
+    // setRecipes(
+    //   recipes.map((recipe) =>
+    //     recipe.id === id
+    //       ? { ...recipe, isFavorite: !recipe.isFavorite }
+    //       : recipe
+    //   )
+    // );
+    console.log("Ich werde isFavorite togglen :)");
   }
 
   return (
