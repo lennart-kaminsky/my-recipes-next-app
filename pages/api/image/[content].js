@@ -17,10 +17,7 @@ export default async function handler(request, response) {
 async function generateImage(newImagePrompt) {
   try {
     const newImage = await openai.images.generate({
-      prompt:
-        "graphical design of the dish " +
-        newImagePrompt +
-        " with colored background",
+      prompt: "painting of " + newImagePrompt + " on colored background",
       n: 1,
       size: "512x512",
     });

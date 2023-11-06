@@ -27,8 +27,19 @@ const StyledTagContainer = styled.ul`
   gap: 0.8rem;
 `;
 
+const percent = "360";
+
 const Tag = styled.li`
-  border: 1px solid var(--primary-color);
+  /* border: 1px solid var(--primary-color); */
+  border: 1px solid transparent;
+  background: conic-gradient(var(--primary-bg-color), var(--primary-bg-color))
+      padding-box,
+    conic-gradient(
+        from 90deg,
+        var(--primary-color) ${percent}deg,
+        var(--secondary-color) ${percent}deg 360deg
+      )
+      border-box;
   border-radius: 0.9rem;
   padding: 0.3rem 0.5rem;
 `;

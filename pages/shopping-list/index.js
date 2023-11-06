@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import styled from "styled-components";
 
 import { ShoppingList } from "@/components/List";
@@ -16,6 +18,19 @@ export default function List({
   shoppingHistory,
 }) {
   const recipesOnList = recipes.filter((recipe) => recipe.onList);
+
+  // const [onListLength, setOnListLength] = useState(
+  //   recipesOnList.map((recipeOnList) =>
+  //     recipeOnList.ingredients.filter((ingredient) =>
+  //       shoppingList.find((item) => {
+  //         const length = item.ingredient.id === ingredient.ingredient.id;
+  //       })
+  //     ).length && length > 0
+  //       ? { ...recipeOnList, percentOnList: length }
+  //       : recipeOnList
+  //   )
+  // );
+  // console.log("TESTTTTT", onListLength);
 
   console.log("shoppingList", shoppingList);
   console.log("shoppingHistory", shoppingHistory);

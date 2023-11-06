@@ -27,25 +27,28 @@ export default function RecipeWrapper({ recipes }) {
 const RecipeContainer = styled.ul`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  row-gap: 1rem;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: 5%;
+  margin-block: 25px;
 `;
 
 const RecipeCard = styled.li`
   position: relative;
   border-radius: 1rem;
-  width: 40%;
-  max-width: 150px;
-  height: 180px;
+  width: 47%;
+  min-width: 160px;
+  max-width: 180px;
+  height: 200px;
   text-align: center;
 `;
 
 const CardHeadline = styled.h3`
-  font-size: 1rem;
+  font-size: 1.5rem;
   position: absolute;
   top: 0;
   margin: 0;
-  padding: 15px 0;
+  padding: 25px 0;
   width: 100%;
   height: 50%;
   background-image: linear-gradient(

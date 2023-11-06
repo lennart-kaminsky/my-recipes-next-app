@@ -22,6 +22,8 @@ export default function NewRecipe({ handleAddRecipe }) {
   const [newSauces, setNewSauces] = useState([]);
   const [currentSauce, setCurrentSauce] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   function handleChangeIngredient(event, key) {
@@ -74,6 +76,7 @@ export default function NewRecipe({ handleAddRecipe }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setIsLoading(true);
 
     const formElements = event.target.elements;
     const recipeName = formElements.recipeNameInput.value;
@@ -111,6 +114,7 @@ export default function NewRecipe({ handleAddRecipe }) {
 
     handleAddRecipe(newRecipe);
 
+    setIsLoading(false);
     router.push("/recipes");
   }
 
@@ -122,117 +126,125 @@ export default function NewRecipe({ handleAddRecipe }) {
       .join("-")
       .toLowerCase();
   }
-
   return (
     <main>
-      <h1>New Recipe</h1>
-      <form onSubmit={handleSubmit}>
-        <fieldset>
-          <label htmlFor="recipeNameInput">Recipe name</label>
-          <input
-            id="recipeNameInput"
-            name="recipeNameInput"
-            type="text"
-            required
-          ></input>
-          <label htmlFor="portionsInput">Portions</label>
-          <input
-            id="portionsInput"
-            name="portionsInput"
-            type="number"
-            min="1"
-            required
-          ></input>
-        </fieldset>
-        <fieldset>
-          <legend>Ingredients</legend>
-          <label htmlFor="ingredientInput">Ingredient</label>
-          <input
-            id="ingredientInput"
-            name="ingredientInput"
-            type="text"
-            min="1"
-            value={currentIngredient.name}
-            onChange={(event) => handleChangeIngredient(event, "name")}
-          ></input>
-          <label htmlFor="amountInput">Amount</label>
-          <input
-            id="amountInput"
-            name="amountInput"
-            type="number"
-            step="0.5"
-            min="0"
-            value={currentIngredient.amount}
-            onChange={(event) => handleChangeIngredient(event, "amount")}
-          ></input>
-          <label htmlFor="unitInput">Unit</label>
-          <input
-            id="unitInput"
-            name="unitInput"
-            type="text"
-            min="1"
-            value={currentIngredient.unit}
-            onChange={(event) => handleChangeIngredient(event, "unit")}
-          ></input>
-          <button type="button" onClick={() => handleAddIngredient()}>
-            Add
-          </button>
-        </fieldset>
-        <fieldset>
-          <label htmlFor="spicesInput">Spices</label>
-          <input
-            id="spicesInput"
-            name="spicesInput"
-            type="text"
-            value={currentSpice}
-            onChange={(event) => handleChangeSpice(event)}
-          ></input>
-          <button type="button" onClick={() => handleAddSpice()}>
-            Add
-          </button>
-        </fieldset>
-        <fieldset>
-          <label htmlFor="saucesInput">Sauces</label>
-          <input
-            id="saucesInput"
-            name="saucesInput"
-            type="text"
-            value={currentSauce}
-            onChange={(event) => handleChangeSauce(event)}
-          ></input>
-          <button type="button" onClick={() => handleAddSauce()}>
-            Add
-          </button>
-        </fieldset>
-        <fieldset>
-          <label htmlFor="preperationInput">Preperation</label>
-          <textarea id="preperationInput" name="preperationInput"></textarea>
-        </fieldset>
-        <button type="submit">Submit</button>
-      </form>
-      <TagContainer tag={newSpices} onRemove={handleRemoveSpice} isEdit />
-      <TagContainer tag={newSauces} onRemove={handleRemoveSauce} isEdit />
-      <table>
-        <StyledTableBody>
-          {newIngredients.map((ingredient) => (
-            <tr key={ingredient.id}>
-              <td>{ingredient.name}</td>
-              <td>{ingredient.amount + ingredient.unit}</td>
-              <td>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveIngredient(ingredient.id)}
-                >
-                  <FontAwesomeIcon icon={faMinus} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </StyledTableBody>
-      </table>
-      <CircleLink $isCancel href="/recipes" $secondaryColor>
-        <FontAwesomeIcon icon={faTimes} />
-      </CircleLink>
+      {isLoading ? (
+        <h1>loading</h1>
+      ) : (
+        <>
+          <h1>New Recipe</h1>
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <label htmlFor="recipeNameInput">Recipe name</label>
+              <input
+                id="recipeNameInput"
+                name="recipeNameInput"
+                type="text"
+                required
+              ></input>
+              <label htmlFor="portionsInput">Portions</label>
+              <input
+                id="portionsInput"
+                name="portionsInput"
+                type="number"
+                min="1"
+                required
+              ></input>
+            </fieldset>
+            <fieldset>
+              <legend>Ingredients</legend>
+              <label htmlFor="ingredientInput">Ingredient</label>
+              <input
+                id="ingredientInput"
+                name="ingredientInput"
+                type="text"
+                min="1"
+                value={currentIngredient.name}
+                onChange={(event) => handleChangeIngredient(event, "name")}
+              ></input>
+              <label htmlFor="amountInput">Amount</label>
+              <input
+                id="amountInput"
+                name="amountInput"
+                type="number"
+                step="0.5"
+                min="0"
+                value={currentIngredient.amount}
+                onChange={(event) => handleChangeIngredient(event, "amount")}
+              ></input>
+              <label htmlFor="unitInput">Unit</label>
+              <input
+                id="unitInput"
+                name="unitInput"
+                type="text"
+                min="1"
+                value={currentIngredient.unit}
+                onChange={(event) => handleChangeIngredient(event, "unit")}
+              ></input>
+              <button type="button" onClick={() => handleAddIngredient()}>
+                Add
+              </button>
+            </fieldset>
+            <fieldset>
+              <label htmlFor="spicesInput">Spices</label>
+              <input
+                id="spicesInput"
+                name="spicesInput"
+                type="text"
+                value={currentSpice}
+                onChange={(event) => handleChangeSpice(event)}
+              ></input>
+              <button type="button" onClick={() => handleAddSpice()}>
+                Add
+              </button>
+            </fieldset>
+            <fieldset>
+              <label htmlFor="saucesInput">Sauces</label>
+              <input
+                id="saucesInput"
+                name="saucesInput"
+                type="text"
+                value={currentSauce}
+                onChange={(event) => handleChangeSauce(event)}
+              ></input>
+              <button type="button" onClick={() => handleAddSauce()}>
+                Add
+              </button>
+            </fieldset>
+            <fieldset>
+              <label htmlFor="preperationInput">Preperation</label>
+              <textarea
+                id="preperationInput"
+                name="preperationInput"
+              ></textarea>
+            </fieldset>
+            <button type="submit">Submit</button>
+          </form>
+          <TagContainer tag={newSpices} onRemove={handleRemoveSpice} isEdit />
+          <TagContainer tag={newSauces} onRemove={handleRemoveSauce} isEdit />
+          <table>
+            <StyledTableBody>
+              {newIngredients.map((ingredient) => (
+                <tr key={ingredient.id}>
+                  <td>{ingredient.name}</td>
+                  <td>{ingredient.amount + ingredient.unit}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveIngredient(ingredient.id)}
+                    >
+                      <FontAwesomeIcon icon={faMinus} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </StyledTableBody>
+          </table>
+          <CircleLink $isCancel href="/recipes" $secondaryColor>
+            <FontAwesomeIcon icon={faTimes} />
+          </CircleLink>{" "}
+        </>
+      )}
     </main>
   );
 }
