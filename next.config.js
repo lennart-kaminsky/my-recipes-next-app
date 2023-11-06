@@ -5,7 +5,11 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ["biancazapatka.com", "oaidalleapiprodscus.blob.core.windows.net"],
+    domains: [
+      "biancazapatka.com",
+      "oaidalleapiprodscus.blob.core.windows.net",
+      "example.com",
+    ],
   },
   reactStrictMode: true,
   webpack(config) {

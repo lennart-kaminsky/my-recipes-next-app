@@ -2,8 +2,15 @@ import Image from "next/image";
 
 import styled from "styled-components";
 import { StyledLink } from "../Link";
+import useSWR from "swr";
 
 export default function RecipeWrapper({ recipes }) {
+  // const { data: recipes, isLoading, error } = useSWR("/api/recipes");
+
+  // if (isLoading) return <h1>is loading...</h1>;
+  // if (error) return <h1>failed to get data...</h1>;
+  // console.log("-----!!!!!-----", recipes);
+
   return (
     <RecipeContainer>
       {recipes.map((recipe) => (

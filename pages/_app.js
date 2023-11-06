@@ -1,15 +1,24 @@
 import { useState } from "react";
+import { SWRConfig } from "swr";
 
 import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 
 import { initialRecipes } from "@/lib/data";
-import Loading from "./loading";
+
+const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
   const [recipes, setRecipes] = useState(initialRecipes);
   const [shoppingList, setShoppingList] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
+  //-------------------------------------------------------
+  //
+  //
+  //-------------------------------------------------------
+  //
+  //
+  //
 
   function handleAddRecipe(newRecipe) {
     setRecipes([...recipes, newRecipe]);
@@ -97,18 +106,20 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <Layout />
-      <Component
-        {...pageProps}
-        recipes={recipes}
-        shoppingList={shoppingList}
-        shoppingHistory={shoppingHistory}
-        handleAddRecipe={handleAddRecipe}
-        handleToggleFavorite={handleToggleFavorite}
-        handleAddToList={handleAddToList}
-        handleToggleOnList={handleToggleOnList}
-        handleRemoveFromList={handleRemoveFromList}
-      />
+      <SWRConfig value={{ fetcher }}>
+        <Layout />
+        <Component
+          {...pageProps}
+          recipes={recipes}
+          shoppingList={shoppingList}
+          shoppingHistory={shoppingHistory}
+          handleAddRecipe={handleAddRecipe}
+          handleToggleFavorite={handleToggleFavorite}
+          handleAddToList={handleAddToList}
+          handleToggleOnList={handleToggleOnList}
+          handleRemoveFromList={handleRemoveFromList}
+        />
+      </SWRConfig>
     </>
   );
 }
