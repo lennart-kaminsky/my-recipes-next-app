@@ -29,11 +29,12 @@ export default function RecipeDetails({
   //
   //
   //
-  const { data: recipes, isLoading, error } = useSWR("/api/recipes");
+  // const { data: recipe, isLoading, error } = useSWR(`/api/recipes/${id}`);
+  const { data: recipes, isLoading, error } = useSWR(`/api/recipes`);
 
   const recipe = recipes.find((recipe) => recipe._id === id);
   const [portions, setPortions] = useState(recipe.portions);
-  console.log(recipe);
+  console.log("--------:!!", recipe);
   //
   //
   //------------------------------------------
