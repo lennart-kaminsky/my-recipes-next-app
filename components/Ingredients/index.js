@@ -23,7 +23,7 @@ export default function Ingredients({
   onToggleFavorite,
   onAddToList,
 }) {
-  console.log("RZEPPPPPT", recipe.spices);
+  // console.log("RZEPPPPPT", recipe.spices);
   return (
     <IngredientsContainer>
       <FlexRowWrapper $spaceBetween $gap>

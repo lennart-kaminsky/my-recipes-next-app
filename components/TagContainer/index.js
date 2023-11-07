@@ -7,7 +7,8 @@ import useSWR from "swr";
 export function TagContainer({ tags, onRemove, isEdit }) {
   const { data: products, isLoading, error } = useSWR("/api/products");
   // const currentProduct = products.map((product) => product._id === tag);
-
+  if (isLoading) return <p>is laoding...</p>;
+  if (error) return <p>failed loading data</p>;
   return (
     <StyledTagContainer>
       {tags.map((tag) =>

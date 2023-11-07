@@ -34,7 +34,7 @@ export default function RecipeDetails({
 
   const recipe = recipes.find((recipe) => recipe._id === id);
   const [portions, setPortions] = useState(recipe.portions);
-  console.log("--------:!!", recipe);
+  console.log("--------:!!", recipe.preparation);
   //
   //
   //------------------------------------------
@@ -95,9 +95,9 @@ export default function RecipeDetails({
           />
         ) : (
           <StyledPreperation>
-            {!recipe.preperation
-              ? "No Preperation added yet 😾"
-              : recipe.preperation}
+            {recipe.preparation
+              ? recipe.preparation
+              : "No Preperation added yet 😾"}
           </StyledPreperation>
         )}
       </main>
@@ -142,4 +142,5 @@ const ShadowContainer = styled.div`
 
 const StyledPreperation = styled.p`
   margin: 5%;
+  font-size: 1.1rem;
 `;
