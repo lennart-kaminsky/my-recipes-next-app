@@ -23,6 +23,7 @@ export default function Ingredients({
   onToggleFavorite,
   onAddToList,
 }) {
+  console.log("RZEPPPPPT", recipe.spices);
   return (
     <IngredientsContainer>
       <FlexRowWrapper $spaceBetween $gap>
@@ -68,7 +69,7 @@ export default function Ingredients({
       {recipe.spices.length > 0 && (
         <>
           <StyledHeadlineTwo>Spices</StyledHeadlineTwo>
-          <TagContainer tag={recipe.spices} />
+          <TagContainer tags={recipe.spices} />
         </>
       )}
       {recipe.sauces.length > 0 && (
