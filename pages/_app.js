@@ -5,10 +5,13 @@ import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 
 import { initialRecipes } from "@/lib/data";
+import { useRouter } from "next/router";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
+  const router = useRouter();
+
   const [recipes, setRecipes] = useState(initialRecipes);
   const [shoppingList, setShoppingList] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
@@ -20,9 +23,53 @@ export default function App({ Component, pageProps }) {
   //
   //
 
-  function handleAddRecipe(newRecipe) {
-    setRecipes([...recipes, newRecipe]);
+  async function handleAddRecipe(newRecipe) {
+    const addedProducts = [];
+    newRecipe.products.map(async (product) => {
+      try {
+        const productResponse = await fetch("/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product.product),
+        });
+        if (productResponse.ok) {
+          const addedProduct = await productResponse.json();
+          addedProducts.push({
+            amount: product.amount,
+            product: addedProduct._id,
+          });
+        } else {
+          console.log("Failed to add product:", response.status);
+        }
+      } catch (error) {
+        console.error("Error while adding product:", error);
+      }
+    });
+
+    // const fetchedProducts = addedProductIds.map(
+    //   async (productId) => await fetch(`/api/products/${productId}`)
+    // );
+
+    const responseRecipe = await fetch("/api/recipes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...newRecipe, products: addedProducts }),
+    });
+
+    if (responseRecipe.ok) {
+      console.og;
+      router.push("/recipes");
+    } else {
+      console.log("Error adding recipe:", responseRecipe.status);
+    }
   }
+  // function handleAddRecipe(newRecipe) {
+  //   setRecipes([...recipes, newRecipe]);
+  // }
 
   function handleAddToList(items) {
     // if (items.ingredients.length > 1) {

@@ -7,6 +7,8 @@ import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
 import { CircleLink } from "@/components/Link";
 
+import { kebabCase } from "@/utils";
+
 export default function NewRecipe({ handleAddRecipe }) {
   const [newIngredients, setNewIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState({
@@ -50,15 +52,26 @@ export default function NewRecipe({ handleAddRecipe }) {
 
   function handleAddSpice() {
     if (!currentSpice) return null;
-    setNewSpices([...newSpices, { id: uid(), name: currentSpice }]);
+    setNewSpices([...newSpices, { name: currentSpice }]);
     setCurrentSpice("");
   }
 
   function handleAddSauce() {
     if (!currentSauce) return null;
-    setNewSauces([...newSauces, { id: uid(), name: currentSauce }]);
+    setNewSauces([...newSauces, { name: currentSauce }]);
     setCurrentSauce("");
   }
+  // function handleAddSpice() {
+  //   if (!currentSpice) return null;
+  //   setNewSpices([...newSpices, { id: uid(), name: currentSpice }]);
+  //   setCurrentSpice("");
+  // }
+
+  // function handleAddSauce() {
+  //   if (!currentSauce) return null;
+  //   setNewSauces([...newSauces, { id: uid(), name: currentSauce }]);
+  //   setCurrentSauce("");
+  // }
 
   function handleRemoveIngredient(id) {
     setNewIngredients(
@@ -82,49 +95,64 @@ export default function NewRecipe({ handleAddRecipe }) {
     const recipeName = formElements.recipeNameInput.value;
 
     const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
-    const data = await response.json();
+    let aiImage = "";
+    if (response.ok) {
+      const data = await response.json();
+      aiImage = data.data[0].url;
+      console.log(data);
+    } else {
+      console.error("Failed to generate image. Use default image now");
 
-    console.log(data);
+      aiImage =
+        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
+    }
 
     const newRecipe = {
-      id: uid(),
       name: recipeName,
-      slug: kebabCase(recipeName),
-      image: {
-        src: data.data[0].url,
-      },
+      image: aiImage,
       portions: Number(formElements.portionsInput.value),
-      ingredients: newIngredients.map((ingredient) => {
+      isFavorite: false,
+      onList: false,
+      products: newIngredients.map((ingredient) => {
         return {
           amount: Number(ingredient.amount),
-          ingredient: {
-            id: ingredient.id,
+          product: {
             name: ingredient.name,
             unit: ingredient.unit,
           },
         };
       }),
-      isFavorite: false,
       spices: newSpices,
       sauces: newSauces,
       preperation: formElements.preperationInput.value,
     };
+    // const newRecipe = {
+    //   id: uid(),
+    //   name: recipeName,
+    //   slug: kebabCase(recipeName),
+    //   image: {
+    //     src: data.data[0].url,
+    //   },
+    //   portions: Number(formElements.portionsInput.value),
+    //   ingredients: newIngredients.map((ingredient) => {
+    //     return {
+    //       amount: Number(ingredient.amount),
+    //       ingredient: {
+    //         id: ingredient.id,
+    //         name: ingredient.name,
+    //         unit: ingredient.unit,
+    //       },
+    //     };
+    //   }),
+    //   isFavorite: false,
+    //   spices: newSpices,
+    //   sauces: newSauces,
+    //   preperation: formElements.preperationInput.value,
+    // };
     console.log("neues Rezept", newRecipe);
-    console.log("neues Zutatetb", newIngredients);
-
-    handleAddRecipe(newRecipe);
 
     setIsLoading(false);
-    router.push("/recipes");
-  }
-
-  function kebabCase(string) {
-    return string
-      .match(
-        /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-      )
-      .join("-")
-      .toLowerCase();
+    handleAddRecipe(newRecipe);
   }
   return (
     <main>
