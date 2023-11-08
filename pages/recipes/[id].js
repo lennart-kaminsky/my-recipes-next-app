@@ -34,6 +34,7 @@ export default function RecipeDetails({
 
   const recipe = recipes.find((recipe) => recipe._id === id);
   const [portions, setPortions] = useState(recipe.portions);
+
   console.log("--------:!!", recipe.preparation);
   //
   //
