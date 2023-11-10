@@ -28,6 +28,7 @@ export default function Ingredients({
 }) {
   const [isEditMode, setIsEditMode] = useState(false);
   // console.log("RZEPPPPPT", recipe.spices);
+  console.log("6.5 Recipe on Details (Ingredients/index.js", recipe);
   return (
     <>
       <IngredientsContainer>

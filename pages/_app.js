@@ -4,7 +4,6 @@ import { SWRConfig } from "swr";
 import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 
-import { initialRecipes } from "@/lib/data";
 import { useRouter } from "next/router";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
@@ -12,7 +11,6 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
-  const [recipes, setRecipes] = useState(initialRecipes);
   const [shoppingList, setShoppingList] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
   //-------------------------------------------------------
@@ -24,47 +22,73 @@ export default function App({ Component, pageProps }) {
   //
 
   async function handleAddRecipe(newRecipe) {
+    console.log("1. Recipe before added DB products", newRecipe);
     const addedProducts = [];
     newRecipe.products.map(async (product) => {
-      try {
-        const productResponse = await fetch("/api/products", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(product.product),
+      // try {
+      console.log("2. Product to add:", product.product);
+      const productResponse = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product.product),
+      });
+      if (productResponse.ok) {
+        const addedProductResponse = await productResponse.json();
+        console.log("3. RESPONSE OF PRODUCT", addedProductResponse);
+        console.log(
+          "4. This should be the added Product:",
+          addedProductResponse.product
+        );
+        addedProducts.push({
+          amount: product.amount,
+          product: addedProductResponse.product._id,
         });
-        if (productResponse.ok) {
-          const addedProduct = await productResponse.json();
-          addedProducts.push({
-            amount: product.amount,
-            product: addedProduct._id,
-          });
-        } else {
-          console.log("Failed to add product:", response.status);
-        }
-      } catch (error) {
-        console.error("Error while adding product:", error);
+      } else {
+        console.log("Failed to add product:", response.status);
       }
+      // } catch (error) {
+      //   console.error("Error while adding product:", error);
+      // }
     });
+
+    console.log("5. Added Products:", addedProducts);
 
     // const fetchedProducts = addedProductIds.map(
     //   async (productId) => await fetch(`/api/products/${productId}`)
     // );
+    // const recipeWithAddedProducts = { ...newRecipe, products: addedProducts };
+    const recipeWithAddedProducts = {
+      name: newRecipe.name,
+      image: newRecipe.image,
+      portions: newRecipe.portions,
+      isFavorite: false,
+      onList: false,
+      products: addedProducts,
+      spices: [],
+      sauces: [],
+      preparation: newRecipe.preparation,
+    };
 
     const responseRecipe = await fetch("/api/recipes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...newRecipe, products: addedProducts }),
+      body: JSON.stringify(recipeWithAddedProducts),
     });
 
     if (responseRecipe.ok) {
-      console.og;
+      console.log("responseRecipe", responseRecipe);
+      console.log("6. neues Rezept: ", recipeWithAddedProducts);
       router.push("/recipes");
     } else {
       console.log("Error adding recipe:", responseRecipe.status);
+      console.log(
+        "6. ACHTUNG recipeWithAddedProducts",
+        recipeWithAddedProducts
+      );
     }
   }
   // function handleAddRecipe(newRecipe) {
@@ -159,7 +183,6 @@ export default function App({ Component, pageProps }) {
         <Layout />
         <Component
           {...pageProps}
-          recipes={recipes}
           shoppingList={shoppingList}
           shoppingHistory={shoppingHistory}
           handleAddRecipe={handleAddRecipe}

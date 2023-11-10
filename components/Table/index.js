@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
 
@@ -11,6 +12,7 @@ export function TableIngredients({ recipe, portions }) {
   if (isLoading) return <h1>loading...</h1>;
   if (error) return <h1>failed loading data...</h1>;
   console.log("data:products", products);
+  console.log("7. Recipe on the Detailspage (Table/index.js)", recipe);
   return (
     <StyledTable>
       <tbody>
@@ -27,7 +29,7 @@ export function TableIngredients({ recipe, portions }) {
             {products.map(
               (_product) =>
                 _product._id === product.product && (
-                  <>
+                  <Fragment key={_product._id}>
                     <td>{_product.name}</td>
                     <RightTD>
                       {checkDecimal(
@@ -36,7 +38,7 @@ export function TableIngredients({ recipe, portions }) {
                         )
                       ) + _product.unit}
                     </RightTD>
-                  </>
+                  </Fragment>
                 )
             )}
             {/* </td> */}

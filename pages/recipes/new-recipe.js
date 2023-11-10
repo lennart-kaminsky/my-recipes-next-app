@@ -94,25 +94,33 @@ export default function NewRecipe({ handleAddRecipe }) {
     const formElements = event.target.elements;
     const recipeName = formElements.recipeNameInput.value;
 
-    const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
-    let aiImage = "";
-    if (response.ok) {
-      const data = await response.json();
-      aiImage = data.data[0].url;
-      console.log(data);
-    } else {
-      console.error("Failed to generate image. Use default image now");
-
-      aiImage =
-        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
-    }
+    // const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
+    // let aiImage = "";
+    // if (response.ok) {
+    //   try {
+    //     const data = await response.json();
+    //     aiImage = data.data[0].url;
+    //     console.log(data);
+    //   } catch (error) {
+    //     console.error(
+    //       "Response was ok, but failed to generate an image.",
+    //       error
+    //     );
+    //   }
+    // } else {
+    //   console.error("Failed to generate image. Use default image now");
+    //   aiImage =
+    //     "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
+    // }
 
     const newRecipe = {
       name: recipeName,
-      image: aiImage,
+      image:
+        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg",
       portions: Number(formElements.portionsInput.value),
       isFavorite: false,
       onList: false,
+      // products: [],
       products: newIngredients.map((ingredient) => {
         return {
           amount: Number(ingredient.amount),
@@ -124,7 +132,7 @@ export default function NewRecipe({ handleAddRecipe }) {
       }),
       spices: newSpices,
       sauces: newSauces,
-      preperation: formElements.preperationInput.value,
+      preparation: formElements.preparationInput.value,
     };
     // const newRecipe = {
     //   id: uid(),
@@ -149,7 +157,7 @@ export default function NewRecipe({ handleAddRecipe }) {
     //   sauces: newSauces,
     //   preperation: formElements.preperationInput.value,
     // };
-    console.log("neues Rezept", newRecipe);
+    // console.log("neues Rezept", newRecipe);
 
     setIsLoading(false);
     handleAddRecipe(newRecipe);
@@ -240,10 +248,10 @@ export default function NewRecipe({ handleAddRecipe }) {
               </button>
             </fieldset>
             <fieldset>
-              <label htmlFor="preperationInput">Preperation</label>
+              <label htmlFor="preparationInput">Preparation</label>
               <textarea
-                id="preperationInput"
-                name="preperationInput"
+                id="preparationInput"
+                name="preparationInput"
               ></textarea>
             </fieldset>
             <button type="submit">Submit</button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -30,12 +30,22 @@ export default function RecipeDetails({
   //
   //
   // const { data: recipe, isLoading, error } = useSWR(`/api/recipes/${id}`);
-  const { data: recipes, isLoading, error } = useSWR(`/api/recipes`);
+  const { data: recipe, isLoading, error } = useSWR(`/api/recipes/${id}`);
+  const [portions, setPortions] = useState();
 
-  const recipe = recipes.find((recipe) => recipe._id === id);
-  const [portions, setPortions] = useState(recipe.portions);
+  useEffect(() => {
+    if (recipe) {
+      setPortions(recipe.portions);
+    }
+  }, [recipe]);
 
-  console.log("--------:!!", recipe.preparation);
+  if (isLoading) return <h2>is loading...</h2>;
+  if (error) return <h2>Failed to load data.</h2>;
+
+  // setPortions(recipe.portions);
+  //const recipe = recipes.find((recipe) => recipe._id === id);
+
+  console.log("Recipe fetched from DB", recipe);
   //
   //
   //------------------------------------------
@@ -51,7 +61,6 @@ export default function RecipeDetails({
   }
 
   // return <h1>{recipe.name}</h1>;
-
   return (
     <>
       <main>
@@ -95,11 +104,11 @@ export default function RecipeDetails({
             onAddToList={handleAddToList}
           />
         ) : (
-          <StyledPreperation>
+          <StyledPreparation>
             {recipe.preparation
               ? recipe.preparation
-              : "No Preperation added yet 😾"}
-          </StyledPreperation>
+              : "No Preparation added yet 😾"}
+          </StyledPreparation>
         )}
       </main>
     </>
@@ -141,7 +150,7 @@ const ShadowContainer = styled.div`
   );
 `;
 
-const StyledPreperation = styled.p`
+const StyledPreparation = styled.p`
   margin: 5%;
   font-size: 1.1rem;
 `;

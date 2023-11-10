@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { StyledLink } from "../Link";
 import useSWR from "swr";
 
-export default function RecipeWrapper(/*{ recipes }*/) {
+export default function RecipeWrapper() {
   const { data: recipes, isLoading, error } = useSWR("/api/recipes");
 
   if (isLoading) return <h1>is loading...</h1>;
