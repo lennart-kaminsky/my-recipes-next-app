@@ -17,8 +17,6 @@ export default function List({
   handleRemoveFromList,
   shoppingHistory,
 }) {
-  const recipesOnList = recipes.filter((recipe) => recipe.onList);
-
   // const [onListLength, setOnListLength] = useState(
   //   recipesOnList.map((recipeOnList) =>
   //     recipeOnList.ingredients.filter((ingredient) =>
@@ -32,16 +30,14 @@ export default function List({
   // );
   // console.log("TESTTTTT", onListLength);
 
-  console.log("shoppingList", shoppingList);
-  console.log("shoppingHistory", shoppingHistory);
   return (
     <MainWithMargin>
       <ListInput></ListInput>
       <ShoppingList
+        listType="current"
         shoppingList={shoppingList}
         onToggleOnList={handleToggleOnList}
       ></ShoppingList>
-      <TagContainer tag={recipesOnList}></TagContainer>
       <FlexRowWrapper $spaceBetween>
         <StyledHeadlineTwo>Shopping History</StyledHeadlineTwo>
         <PortionsButton
@@ -51,12 +47,12 @@ export default function List({
           Clear all
         </PortionsButton>
       </FlexRowWrapper>
-      <ShoppingList
+      {/* <ShoppingList
         onList
         shoppingList={shoppingHistory}
         onToggleOnList={handleToggleOnList}
         handleRemoveFromList={handleRemoveFromList}
-      ></ShoppingList>
+      ></ShoppingList> */}
     </MainWithMargin>
   );
 }

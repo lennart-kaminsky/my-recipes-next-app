@@ -1,3 +1,5 @@
+import useSWR from "swr";
+
 export function kebabCase(string) {
   return string
     .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
@@ -124,5 +126,37 @@ export async function handleAddRecipe(newRecipe) {
   } catch (error) {
     console.error("Error adding recipe:", error.message);
     // Handle the error (e.g., show a user-friendly error message)
+  }
+}
+
+export async function addToList(recipe, currentList) {
+  try {
+    const updatedCurrentList = {
+      ...currentList,
+      products: [...currentList.products, ...recipe.products],
+    };
+    console.log("updated list", updatedCurrentList);
+
+    const updatedCurrentListResponse = await fetch(
+      "/api/shoppinglists/current",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCurrentList),
+      }
+    );
+
+    if (updatedCurrentListResponse.ok) {
+      console.log("Shopping list successfully updated.");
+    } else {
+      console.log(
+        "Error updating shopping list:",
+        updatedCurrentListResponse.status
+      );
+    }
+  } catch (error) {
+    console.error("Error updating shopping list:", error.message);
   }
 }

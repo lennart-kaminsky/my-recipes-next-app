@@ -15,7 +15,6 @@ import Ingredients from "@/components/Ingredients";
 import useSWR from "swr";
 
 export default function RecipeDetails({
-  //recipes,
   handleToggleFavorite,
   handleAddToList,
 }) {
@@ -24,12 +23,6 @@ export default function RecipeDetails({
   const router = useRouter();
   const { id } = router.query;
 
-  // const recipe = recipes.find((recipe) => recipe.slug === slug);
-  //--------------------------------------
-  //
-  //
-  //
-  // const { data: recipe, isLoading, error } = useSWR(`/api/recipes/${id}`);
   const { data: recipe, isLoading, error } = useSWR(`/api/recipes/${id}`);
   const [portions, setPortions] = useState();
 
@@ -42,13 +35,6 @@ export default function RecipeDetails({
   if (isLoading) return <h2>is loading...</h2>;
   if (error) return <h2>Failed to load data.</h2>;
 
-  // setPortions(recipe.portions);
-  //const recipe = recipes.find((recipe) => recipe._id === id);
-
-  console.log("Recipe fetched from DB", recipe);
-  //
-  //
-  //------------------------------------------
   function handleChangeDisplay() {
     setDisplay(!display);
   }
@@ -60,7 +46,6 @@ export default function RecipeDetails({
     setPortions(portions + 1);
   }
 
-  // return <h1>{recipe.name}</h1>;
   return (
     <>
       <main>

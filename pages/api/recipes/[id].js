@@ -13,16 +13,6 @@ export default async function handler(request, response) {
     response.status(200).json(recipe);
   }
 
-  if (request.method === "PATCH") {
-    try {
-      const updatedRecipe = request.body;
-      await Recipe.findByIdAndUpdate(id, updatedRecipe);
-      response.status(200).json({ status: "Recipe successfully updated." });
-    } catch (error) {
-      response.status(400).json({ status: error.message });
-    }
-  }
-
   if (request.method === "PUT") {
     try {
       const updatedRecipe = request.body;
@@ -44,12 +34,10 @@ export default async function handler(request, response) {
       );
 
       // Send the updated recipe as the response
-      response
-        .status(200)
-        .json({
-          status: "Recipe successfully updated.",
-          recipe: updatedRecipeDocument,
-        });
+      response.status(200).json({
+        status: "Recipe successfully updated.",
+        recipe: updatedRecipeDocument,
+      });
     } catch (error) {
       response.status(400).json({ status: error.message });
     }

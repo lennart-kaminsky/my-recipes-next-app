@@ -4,13 +4,9 @@ import { SWRConfig } from "swr";
 import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 
-import { useRouter } from "next/router";
-
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter();
-
   const [shoppingList, setShoppingList] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
 
@@ -85,13 +81,6 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleToggleFavorite(id) {
-    // setRecipes(
-    //   recipes.map((recipe) =>
-    //     recipe.id === id
-    //       ? { ...recipe, isFavorite: !recipe.isFavorite }
-    //       : recipe
-    //   )
-    // );
     console.log("Ich werde isFavorite togglen :)");
   }
 

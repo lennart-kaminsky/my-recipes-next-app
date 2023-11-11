@@ -9,7 +9,6 @@ export default function RecipeWrapper() {
 
   if (isLoading) return <h1>is loading...</h1>;
   if (error) return <h1>failed to get data...</h1>;
-  console.log("-----!!!!!-----", recipes);
 
   return (
     <RecipeContainer>

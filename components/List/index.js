@@ -2,44 +2,106 @@ import styled from "styled-components";
 import { ButtonNoStyle } from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import useSWR from "swr";
 
 export function ShoppingList({
-  shoppingList,
+  listType,
   onList,
   onToggleOnList,
   handleRemoveFromList,
 }) {
-  return (
-    <StyledShoppingList>
-      {shoppingList
-        .filter((item) => item.onList)
-        .map((item) => (
-          <StyledShoppingListItem
-            key={item.ingredient.id}
-            $border={shoppingList.indexOf(item) < shoppingList.length - 1}
-          >
-            <StyledLabel htmlFor={`checkbox${item.ingredient.id}`}>
-              {item.amount + item.ingredient.unit + " " + item.ingredient.name}
-              <StyledCheckbox
-                id={`checkbox${item.ingredient.id}`}
-                name={`checkbox${item.ingredient.id}`}
-                type="checkbox"
-                onChange={() => onToggleOnList(item.ingredient.id)}
-                checked={onList}
-              />
-              <StyledCheckboxSpan></StyledCheckboxSpan>
-            </StyledLabel>
-            {onList && (
-              <ButtonNoStyle
-                onClick={() => handleRemoveFromList(item.ingredient.id)}
-              >
-                <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-              </ButtonNoStyle>
-            )}
-          </StyledShoppingListItem>
-        ))}
-    </StyledShoppingList>
+  const {
+    data: shoppinglist,
+    isLoading: isLoadingCurrentList,
+    error: errorCurrentList,
+  } = useSWR(`/api/shoppinglists/${listType}`);
+
+  const {
+    data: products,
+    isLoading: isLoadingProducts,
+    error: errorProducts,
+  } = useSWR("/api/products");
+
+  if (isLoadingCurrentList || isLoadingProducts)
+    return <p>loading shopping list and products...</p>;
+  if (errorCurrentList || errorProducts)
+    return <p>error loading shopping list or products.</p>;
+
+  console.log("ShoppingListe", shoppinglist.products);
+
+  const test = shoppinglist.products.map((product) =>
+    products.find((_product) => _product._id === product._id && "Hi")
   );
+  console.log("test", test);
+  return (
+    <>
+      <StyledShoppingList>
+        {shoppinglist.products.map((product) =>
+          products.map(
+            (_product) =>
+              _product._id === product._id && (
+                <StyledShoppingListItem
+                  key={product._id}
+                  $border={
+                    shoppinglist.products.indexOf(product) <
+                    shoppinglist.products - 1
+                  }
+                >
+                  <StyledLabel htmlFor={`checkbox${_product._id}`}>
+                    {product.amount + _product.unit + " " + _product.name}
+                    <StyledCheckbox
+                      id={`checkbox${_product._id}`}
+                      name={`checkbox${_product._id}`}
+                      type="checkbox"
+                      onChange={() => onToggleOnList(product._id)}
+                      checked={listType === "history"}
+                    />
+                    <StyledCheckboxSpan></StyledCheckboxSpan>
+                  </StyledLabel>
+                  {listType === "history" && (
+                    <ButtonNoStyle
+                      onClick={() => handleRemoveFromList(product._id)}
+                    >
+                      <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                    </ButtonNoStyle>
+                  )}
+                </StyledShoppingListItem>
+              )
+          )
+        )}
+      </StyledShoppingList>
+      <h1>tetst</h1>
+    </>
+  );
+  // <StyledShoppingList>
+  //   {shoppingList
+  //     .filter((item) => item.onList)
+  //     .map((item) => (
+  //       <StyledShoppingListItem
+  //         key={item.ingredient.id}
+  //         $border={shoppingList.indexOf(item) < shoppingList.length - 1}
+  //       >
+  //         <StyledLabel htmlFor={`checkbox${item.ingredient.id}`}>
+  //           {item.amount + item.ingredient.unit + " " + item.ingredient.name}
+  //           <StyledCheckbox
+  //             id={`checkbox${item.ingredient.id}`}
+  //             name={`checkbox${item.ingredient.id}`}
+  //             type="checkbox"
+  //             onChange={() => onToggleOnList(item.ingredient.id)}
+  //             checked={onList}
+  //           />
+  //           <StyledCheckboxSpan></StyledCheckboxSpan>
+  //         </StyledLabel>
+  //         {onList && (
+  //           <ButtonNoStyle
+  //             onClick={() => handleRemoveFromList(item.ingredient.id)}
+  //           >
+  //             <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+  //           </ButtonNoStyle>
+  //         )}
+  //       </StyledShoppingListItem>
+  //     ))}
+  // </StyledShoppingList>
 }
 
 const StyledShoppingList = styled.ul`

@@ -18,17 +18,20 @@ import { TableIngredients } from "../Table";
 import { useState } from "react";
 import { RecipeForm } from "../RecipeForm";
 
+import { addToList } from "@/utils";
+import useSWR from "swr";
+
 export default function Ingredients({
   portions,
   recipe,
   handleDecrementPortion,
   handleIncrementPortion,
   onToggleFavorite,
-  onAddToList,
 }) {
   const [isEditMode, setIsEditMode] = useState(false);
-  // console.log("RZEPPPPPT", recipe.spices);
-  console.log("6.5 Recipe on Details (Ingredients/index.js", recipe);
+  const { data: currentShoppinglist } = useSWR("/api/shoppinglists/current");
+  // const { data: historyShoppinglist } = useSWR("/api/shoppinglists/history");
+
   return (
     <>
       <IngredientsContainer>
@@ -49,7 +52,7 @@ export default function Ingredients({
             $single
             $isHighlighted={!recipe.onList}
             type="button"
-            onClick={() => onAddToList(recipe)}
+            onClick={() => addToList(recipe, currentShoppinglist)}
           >
             <FontAwesomeIcon icon={faCartShopping} />
           </PortionsButton>

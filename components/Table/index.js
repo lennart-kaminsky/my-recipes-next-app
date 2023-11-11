@@ -11,8 +11,6 @@ export function TableIngredients({ recipe, portions }) {
   const { data: products, isLoading, error } = useSWR("/api/products");
   if (isLoading) return <h1>loading...</h1>;
   if (error) return <h1>failed loading data...</h1>;
-  console.log("data:products", products);
-  console.log("7. Recipe on the Detailspage (Table/index.js)", recipe);
   return (
     <StyledTable>
       <tbody>
@@ -24,8 +22,6 @@ export function TableIngredients({ recipe, portions }) {
               recipe.products.indexOf(product) < recipe.products.length - 1
             }
           >
-            {/* <td> */}
-            {/*{product.ingredient.name}*/}
             {products.map(
               (_product) =>
                 _product._id === product.product && (
@@ -41,12 +37,6 @@ export function TableIngredients({ recipe, portions }) {
                   </Fragment>
                 )
             )}
-            {/* </td> */}
-            {/* <RightTD> */}
-            {/* {checkDecimal(
-                Number.parseFloat((portions * product.amount) / recipe.portions)
-              ) + product.ingredient.unit} */}
-            {/* </RightTD> */}
           </StyledTableRow>
         ))}
       </tbody>
