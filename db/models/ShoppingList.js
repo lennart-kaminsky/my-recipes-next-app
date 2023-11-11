@@ -8,7 +8,7 @@ const shoppinglistSchema = new Schema({
   products: [
     {
       amount: { type: Number },
-      product: { type: Schema.Types.ObjectId, ref: "Product" },
+      product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
     },
   ],
 });

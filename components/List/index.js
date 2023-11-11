@@ -32,32 +32,33 @@ export function ShoppingList({
   const test = shoppinglist.products.map((product) =>
     products.find((_product) => _product._id === product._id && "Hi")
   );
-  console.log("test", test);
+  console.log("test", products);
+
   return (
-    <>
-      <StyledShoppingList>
-        {shoppinglist.products.map((product) =>
-          products.map(
+    <StyledShoppingList>
+      {shoppinglist.products.map((product) => (
+        <StyledShoppingListItem
+          key={product.product}
+          $border={
+            shoppinglist.products.indexOf(product) < shoppinglist.products - 1
+          }
+        >
+          {products.map(
             (_product) =>
-              _product._id === product._id && (
-                <StyledShoppingListItem
-                  key={product._id}
-                  $border={
-                    shoppinglist.products.indexOf(product) <
-                    shoppinglist.products - 1
-                  }
+              _product._id === product.product && (
+                <StyledLabel
+                  key={_product._id}
+                  htmlFor={`checkbox${_product._id}`}
                 >
-                  <StyledLabel htmlFor={`checkbox${_product._id}`}>
-                    {product.amount + _product.unit + " " + _product.name}
-                    <StyledCheckbox
-                      id={`checkbox${_product._id}`}
-                      name={`checkbox${_product._id}`}
-                      type="checkbox"
-                      onChange={() => onToggleOnList(product._id)}
-                      checked={listType === "history"}
-                    />
-                    <StyledCheckboxSpan></StyledCheckboxSpan>
-                  </StyledLabel>
+                  {product.amount + _product.unit + " " + _product.name}
+                  <StyledCheckbox
+                    id={`checkbox${_product._id}`}
+                    name={`checkbox${_product._id}`}
+                    type="checkbox"
+                    onChange={() => onToggleOnList(product._id)}
+                    checked={listType === "history"}
+                  />
+                  <StyledCheckboxSpan></StyledCheckboxSpan>
                   {listType === "history" && (
                     <ButtonNoStyle
                       onClick={() => handleRemoveFromList(product._id)}
@@ -65,43 +66,13 @@ export function ShoppingList({
                       <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
                     </ButtonNoStyle>
                   )}
-                </StyledShoppingListItem>
+                </StyledLabel>
               )
-          )
-        )}
-      </StyledShoppingList>
-      <h1>tetst</h1>
-    </>
+          )}
+        </StyledShoppingListItem>
+      ))}
+    </StyledShoppingList>
   );
-  // <StyledShoppingList>
-  //   {shoppingList
-  //     .filter((item) => item.onList)
-  //     .map((item) => (
-  //       <StyledShoppingListItem
-  //         key={item.ingredient.id}
-  //         $border={shoppingList.indexOf(item) < shoppingList.length - 1}
-  //       >
-  //         <StyledLabel htmlFor={`checkbox${item.ingredient.id}`}>
-  //           {item.amount + item.ingredient.unit + " " + item.ingredient.name}
-  //           <StyledCheckbox
-  //             id={`checkbox${item.ingredient.id}`}
-  //             name={`checkbox${item.ingredient.id}`}
-  //             type="checkbox"
-  //             onChange={() => onToggleOnList(item.ingredient.id)}
-  //             checked={onList}
-  //           />
-  //           <StyledCheckboxSpan></StyledCheckboxSpan>
-  //         </StyledLabel>
-  //         {onList && (
-  //           <ButtonNoStyle
-  //             onClick={() => handleRemoveFromList(item.ingredient.id)}
-  //           >
-  //             <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-  //           </ButtonNoStyle>
-  //         )}
-  //       </StyledShoppingListItem>
-  //     ))}
-  // </StyledShoppingList>
 }
 
 const StyledShoppingList = styled.ul`
