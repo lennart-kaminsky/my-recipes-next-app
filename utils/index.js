@@ -135,7 +135,6 @@ export async function addToList(recipe, currentList) {
       ...currentList,
       products: [...currentList.products, ...recipe.products],
     };
-    console.log("updated list", updatedCurrentList);
 
     const updatedCurrentListResponse = await fetch(
       "/api/shoppinglists/current",
@@ -158,5 +157,68 @@ export async function addToList(recipe, currentList) {
     }
   } catch (error) {
     console.error("Error updating shopping list:", error.message);
+  }
+}
+
+export async function moveToHistoryList(
+  productToRemove,
+  currentList,
+  oppositeList,
+  listType
+) {
+  console.log("--product to remove", productToRemove);
+  console.log("--current list", currentList);
+  console.log("--opposite list", oppositeList);
+  console.log("--list type", listType);
+  console.log("toggle toggle");
+  const oppositeListType = listType === "current" ? "history" : "current";
+
+  try {
+    const updatedProducts = currentList.products.filter(
+      (product) => product._id !== productToRemove._id
+    );
+
+    const updatedCurrentList = { ...currentList, products: updatedProducts };
+
+    const updatedCurrentListResponse = await fetch(
+      `api/shoppinglists/${listType}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedCurrentList),
+      }
+    );
+    if (updatedCurrentListResponse.ok) {
+      console.log(
+        `Product successfully moved from ${listType} list to ${oppositeListType} list.`
+      );
+    }
+
+    const updatedOppositeList = {
+      ...oppositeList,
+      products: [...oppositeList.products, productToRemove],
+    };
+
+    const updatedOppositeListResponse = await fetch(
+      `/api/shoppinglists/${oppositeListType}`,
+      {
+        method: "PUT",
+        hearders: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedOppositeList),
+      }
+    );
+    if (updatedOppositeListResponse.ok) {
+      console.log(
+        `Product successfully moved from ${listType} list to ${oppositeListType} list.`
+      );
+    }
+
+    console.log("updatedCurrentListResponse", updatedCurrentListResponse);
+  } catch (error) {
+    console.error(
+      "Error moving product from shopping list to shopping history."
+    );
   }
 }

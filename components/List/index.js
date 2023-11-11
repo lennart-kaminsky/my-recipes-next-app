@@ -7,9 +7,11 @@ import useSWR from "swr";
 export function ShoppingList({
   listType,
   onList,
-  onToggleOnList,
+  onChange,
   handleRemoveFromList,
 }) {
+  const oppositeListType = listType === "current" ? "history" : "current";
+
   const {
     data: shoppinglist,
     isLoading: isLoadingCurrentList,
@@ -17,22 +19,23 @@ export function ShoppingList({
   } = useSWR(`/api/shoppinglists/${listType}`);
 
   const {
+    data: oppositeShoppingList,
+    isLoading: isLoadingOppositeList,
+    error: errorOppositeList,
+  } = useSWR(`/api/shoppinglists/${oppositeListType}`);
+
+  const {
     data: products,
     isLoading: isLoadingProducts,
     error: errorProducts,
   } = useSWR("/api/products");
 
-  if (isLoadingCurrentList || isLoadingProducts)
-    return <p>loading shopping list and products...</p>;
-  if (errorCurrentList || errorProducts)
+  if (isLoadingCurrentList || isLoadingOppositeList || isLoadingProducts)
+    return <p>loading shopping list, history and products...</p>;
+  if (errorCurrentList || errorOppositeList || errorProducts)
     return <p>error loading shopping list or products.</p>;
 
   console.log("ShoppingListe", shoppinglist.products);
-
-  const test = shoppinglist.products.map((product) =>
-    products.find((_product) => _product._id === product._id && "Hi")
-  );
-  console.log("test", products);
 
   return (
     <StyledShoppingList>
@@ -55,7 +58,14 @@ export function ShoppingList({
                     id={`checkbox${_product._id}`}
                     name={`checkbox${_product._id}`}
                     type="checkbox"
-                    onChange={() => onToggleOnList(product._id)}
+                    onChange={() =>
+                      onChange(
+                        product,
+                        shoppinglist,
+                        oppositeShoppingList,
+                        listType
+                      )
+                    }
                     checked={listType === "history"}
                   />
                   <StyledCheckboxSpan></StyledCheckboxSpan>
