@@ -13,87 +13,6 @@ export default function App({ Component, pageProps }) {
 
   const [shoppingList, setShoppingList] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
-  //-------------------------------------------------------
-  //
-  //
-  //-------------------------------------------------------
-  //
-  //
-  //
-
-  async function handleAddRecipe(newRecipe) {
-    console.log("1. Recipe before added DB products", newRecipe);
-    const addedProducts = [];
-    newRecipe.products.map(async (product) => {
-      // try {
-      console.log("2. Product to add:", product.product);
-      const productResponse = await fetch("/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product.product),
-      });
-      if (productResponse.ok) {
-        const addedProductResponse = await productResponse.json();
-        console.log("3. RESPONSE OF PRODUCT", addedProductResponse);
-        console.log(
-          "4. This should be the added Product:",
-          addedProductResponse.product
-        );
-        addedProducts.push({
-          amount: product.amount,
-          product: addedProductResponse.product._id,
-        });
-      } else {
-        console.log("Failed to add product:", response.status);
-      }
-      // } catch (error) {
-      //   console.error("Error while adding product:", error);
-      // }
-    });
-
-    console.log("5. Added Products:", addedProducts);
-
-    // const fetchedProducts = addedProductIds.map(
-    //   async (productId) => await fetch(`/api/products/${productId}`)
-    // );
-    // const recipeWithAddedProducts = { ...newRecipe, products: addedProducts };
-    const recipeWithAddedProducts = {
-      name: newRecipe.name,
-      image: newRecipe.image,
-      portions: newRecipe.portions,
-      isFavorite: false,
-      onList: false,
-      products: addedProducts,
-      spices: [],
-      sauces: [],
-      preparation: newRecipe.preparation,
-    };
-
-    const responseRecipe = await fetch("/api/recipes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(recipeWithAddedProducts),
-    });
-
-    if (responseRecipe.ok) {
-      console.log("responseRecipe", responseRecipe);
-      console.log("6. neues Rezept: ", recipeWithAddedProducts);
-      router.push("/recipes");
-    } else {
-      console.log("Error adding recipe:", responseRecipe.status);
-      console.log(
-        "6. ACHTUNG recipeWithAddedProducts",
-        recipeWithAddedProducts
-      );
-    }
-  }
-  // function handleAddRecipe(newRecipe) {
-  //   setRecipes([...recipes, newRecipe]);
-  // }
 
   function handleAddToList(items) {
     // if (items.ingredients.length > 1) {
@@ -185,7 +104,6 @@ export default function App({ Component, pageProps }) {
           {...pageProps}
           shoppingList={shoppingList}
           shoppingHistory={shoppingHistory}
-          handleAddRecipe={handleAddRecipe}
           handleToggleFavorite={handleToggleFavorite}
           handleAddToList={handleAddToList}
           handleToggleOnList={handleToggleOnList}

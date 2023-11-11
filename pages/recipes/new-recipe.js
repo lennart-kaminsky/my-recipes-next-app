@@ -7,9 +7,9 @@ import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
 import { CircleLink } from "@/components/Link";
 
-import { kebabCase } from "@/utils";
+import { kebabCase, handleAddRecipe } from "@/utils";
 
-export default function NewRecipe({ handleAddRecipe }) {
+export default function NewRecipe() {
   const [newIngredients, setNewIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState({
     amount: "",
@@ -94,33 +94,32 @@ export default function NewRecipe({ handleAddRecipe }) {
     const formElements = event.target.elements;
     const recipeName = formElements.recipeNameInput.value;
 
-    // const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
-    // let aiImage = "";
-    // if (response.ok) {
-    //   try {
-    //     const data = await response.json();
-    //     aiImage = data.data[0].url;
-    //     console.log(data);
-    //   } catch (error) {
-    //     console.error(
-    //       "Response was ok, but failed to generate an image.",
-    //       error
-    //     );
-    //   }
-    // } else {
-    //   console.error("Failed to generate image. Use default image now");
-    //   aiImage =
-    //     "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
-    // }
+    //fetch and generate image form openAi
+    const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
+    let aiImage = "";
+    if (response.ok) {
+      try {
+        const data = await response.json();
+        aiImage = data.data[0].url;
+        console.log(data);
+      } catch (error) {
+        console.error(
+          "Response was ok, but failed to generate an image.",
+          error
+        );
+      }
+    } else {
+      console.error("Failed to generate image. Use default image now");
+      aiImage =
+        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
+    }
 
     const newRecipe = {
       name: recipeName,
-      image:
-        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg",
+      image: aiImage,
       portions: Number(formElements.portionsInput.value),
       isFavorite: false,
       onList: false,
-      // products: [],
       products: newIngredients.map((ingredient) => {
         return {
           amount: Number(ingredient.amount),
@@ -134,34 +133,12 @@ export default function NewRecipe({ handleAddRecipe }) {
       sauces: newSauces,
       preparation: formElements.preparationInput.value,
     };
-    // const newRecipe = {
-    //   id: uid(),
-    //   name: recipeName,
-    //   slug: kebabCase(recipeName),
-    //   image: {
-    //     src: data.data[0].url,
-    //   },
-    //   portions: Number(formElements.portionsInput.value),
-    //   ingredients: newIngredients.map((ingredient) => {
-    //     return {
-    //       amount: Number(ingredient.amount),
-    //       ingredient: {
-    //         id: ingredient.id,
-    //         name: ingredient.name,
-    //         unit: ingredient.unit,
-    //       },
-    //     };
-    //   }),
-    //   isFavorite: false,
-    //   spices: newSpices,
-    //   sauces: newSauces,
-    //   preperation: formElements.preperationInput.value,
-    // };
-    // console.log("neues Rezept", newRecipe);
 
-    setIsLoading(false);
     handleAddRecipe(newRecipe);
+    setIsLoading(false);
+    router.push("/recipes");
   }
+
   return (
     <main>
       {isLoading ? (

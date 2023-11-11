@@ -82,7 +82,7 @@ export default function Ingredients({
         {recipe.sauces.length > 0 && (
           <>
             <StyledHeadlineTwo>Sauces</StyledHeadlineTwo>
-            <TagContainer tag={recipe.sauces} />
+            <TagContainer tags={recipe.sauces} />
           </>
         )}
       </IngredientsContainer>
