@@ -12,9 +12,7 @@ export default async function handler(request, response) {
   if (request.method === "POST") {
     try {
       const recipeData = request.body;
-      console.log("RECIPEDATA", request.body);
       const addedRecipe = await Recipe.create(recipeData);
-      console.log("ADDEDRECIPE", addedRecipe);
       response.status(201).json({ recipe: addedRecipe });
     } catch (error) {
       console.log(error);

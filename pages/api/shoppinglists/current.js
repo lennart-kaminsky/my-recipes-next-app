@@ -8,9 +8,6 @@ export default async function handler(request, response) {
     const currentShoppinglist = await Shoppinglist.findOne({
       name: "current",
     });
-    console.log("-----------------------------------");
-    console.log(currentShoppinglist);
-    console.log("-----------------------------------");
     if (!currentShoppinglist) {
       return response.status(404).json({ status: "Not Found" });
     }
@@ -28,7 +25,7 @@ export default async function handler(request, response) {
         response.status(404).json({ status: "Not Found" });
       }
 
-      const updatedCurrrentListDocumnet = await Shoppinglist.findOneAndUpdate(
+      const updatedCurrrentListDocument = await Shoppinglist.findOneAndUpdate(
         { name: "current" },
         updatedCurrentList,
         { new: true, runValidators: true }
@@ -36,7 +33,7 @@ export default async function handler(request, response) {
 
       response.status(200).json({
         status: "Shoppinglist successfully updated",
-        currentShoppinglist: updatedCurrrentListDocumnet,
+        currentShoppinglist: updatedCurrrentListDocument,
       });
     } catch (error) {
       response.status(400).json({ status: error.message });

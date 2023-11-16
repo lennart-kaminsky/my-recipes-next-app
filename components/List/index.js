@@ -4,24 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
 
-export function ShoppingList({
-  listType,
-  onList,
-  onChange,
-  handleRemoveFromList,
-}) {
+export function ShoppingList({ listType, onChange, handleRemoveFromList }) {
   const oppositeListType = listType === "current" ? "history" : "current";
 
   const {
     data: shoppinglist,
     isLoading: isLoadingCurrentList,
     error: errorCurrentList,
+    mutate: mutateCurrent,
   } = useSWR(`/api/shoppinglists/${listType}`);
 
   const {
     data: oppositeShoppingList,
     isLoading: isLoadingOppositeList,
     error: errorOppositeList,
+    mutate: mutateOpposite,
   } = useSWR(`/api/shoppinglists/${oppositeListType}`);
 
   const {
@@ -35,7 +32,10 @@ export function ShoppingList({
   if (errorCurrentList || errorOppositeList || errorProducts)
     return <p>error loading shopping list or products.</p>;
 
-  console.log("ShoppingListe", shoppinglist.products);
+  function mutateLists() {
+    mutateCurrent();
+    mutateOpposite();
+  }
 
   return (
     <StyledShoppingList>
@@ -63,7 +63,8 @@ export function ShoppingList({
                         product,
                         shoppinglist,
                         oppositeShoppingList,
-                        listType
+                        listType,
+                        mutateLists
                       )
                     }
                     checked={listType === "history"}

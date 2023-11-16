@@ -21,19 +21,19 @@ export default async function handler(request, response) {
       const existingHistoryList = await Shoppinglist.findOne({
         name: "history",
       });
+
       if (!existingHistoryList) {
         response.status(404).json({ status: "Not Found" });
       }
 
-      const updatedHistoryListDocumnet = await Shoppinglist.findOneAndUpdate(
+      const updatedHistoryListDocument = await Shoppinglist.findOneAndUpdate(
         { name: "history" },
         updatedHistoryList,
         { new: true, runValidators: true }
       );
-
       response.status(200).json({
         status: "Shoppinglist successfully updated",
-        currentShoppinglist: updatedHistoryListDocumnet,
+        updatedHistoryList: updatedHistoryListDocument,
       });
     } catch (error) {
       response.status(400).json({ status: error.message });

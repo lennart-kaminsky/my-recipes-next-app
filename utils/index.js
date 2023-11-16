@@ -160,17 +160,13 @@ export async function addToList(recipe, currentList) {
   }
 }
 
-export async function moveToHistoryList(
+export async function toggleList(
   productToRemove,
   currentList,
   oppositeList,
-  listType
+  listType,
+  mutateLists
 ) {
-  console.log("--product to remove", productToRemove);
-  console.log("--current list", currentList);
-  console.log("--opposite list", oppositeList);
-  console.log("--list type", listType);
-  console.log("toggle toggle");
   const oppositeListType = listType === "current" ? "history" : "current";
 
   try {
@@ -189,9 +185,7 @@ export async function moveToHistoryList(
       }
     );
     if (updatedCurrentListResponse.ok) {
-      console.log(
-        `Product successfully moved from ${listType} list to ${oppositeListType} list.`
-      );
+      console.log(`Product successfully removed from ${listType} list.`);
     }
 
     const updatedOppositeList = {
@@ -203,7 +197,7 @@ export async function moveToHistoryList(
       `/api/shoppinglists/${oppositeListType}`,
       {
         method: "PUT",
-        hearders: {
+        headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedOppositeList),
@@ -214,8 +208,7 @@ export async function moveToHistoryList(
         `Product successfully moved from ${listType} list to ${oppositeListType} list.`
       );
     }
-
-    console.log("updatedCurrentListResponse", updatedCurrentListResponse);
+    mutateLists();
   } catch (error) {
     console.error(
       "Error moving product from shopping list to shopping history."

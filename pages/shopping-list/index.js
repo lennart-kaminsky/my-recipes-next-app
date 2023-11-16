@@ -1,28 +1,19 @@
-import { useState } from "react";
-
 import styled from "styled-components";
 
 import { ShoppingList } from "@/components/List";
 import { StyledHeadlineTwo } from "@/components/StyledText";
-import { TagContainer } from "@/components/TagContainer";
+
 import { FlexRowWrapper } from "@/components/Wrapper";
 import { PortionsButton } from "@/components/Button";
 
 import ListInput from "@/components/ListInput";
-import { moveToHistoryList } from "@/utils";
+import { toggleList } from "@/utils";
 
-export default function List({
-  shoppingList,
-
-  handleRemoveFromList,
-}) {
+export default function List({ handleRemoveFromList }) {
   return (
     <MainWithMargin>
       <ListInput></ListInput>
-      <ShoppingList
-        listType="current"
-        onChange={moveToHistoryList}
-      ></ShoppingList>
+      <ShoppingList listType="current" onChange={toggleList}></ShoppingList>
       <FlexRowWrapper $spaceBetween>
         <StyledHeadlineTwo>Shopping History</StyledHeadlineTwo>
         <PortionsButton
@@ -32,10 +23,7 @@ export default function List({
           Clear all
         </PortionsButton>
       </FlexRowWrapper>
-      <ShoppingList
-        listType="history"
-        onChange={moveToHistoryList}
-      ></ShoppingList>
+      <ShoppingList listType="history" onChange={toggleList}></ShoppingList>
     </MainWithMargin>
   );
 }
