@@ -7,7 +7,7 @@ import { FlexRowWrapper } from "@/components/Wrapper";
 import { PortionsButton } from "@/components/Button";
 
 import ListInput from "@/components/ListInput";
-import { toggleList } from "@/utils";
+import { toggleList } from "@/utils/toggleList";
 
 export default function List({ handleRemoveFromList }) {
   return (

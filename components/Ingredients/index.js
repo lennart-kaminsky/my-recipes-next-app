@@ -18,7 +18,7 @@ import { TableIngredients } from "../Table";
 import { useState } from "react";
 import { RecipeForm } from "../RecipeForm";
 
-import { addToList } from "@/utils";
+import { addToList } from "@/utils/addToList";
 import useSWR from "swr";
 
 export default function Ingredients({

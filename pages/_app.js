@@ -11,36 +11,6 @@ export default function App({ Component, pageProps }) {
   const [shoppingHistory, setShoppingHistory] = useState([]);
 
   function handleAddToList(items) {
-    // if (items.ingredients.length > 1) {
-    //   const itemsNotInList = items.ingredients
-    //     .map((item) =>
-    //       //Item is not on in shoppinglist array:
-    //       !shoppingList.find(
-    //         (listItem) => listItem.ingredient.id === item.ingredient.id
-    //       ) ||
-    //       //Item is on shopping list but has onList="not" or "wasOnList":
-    //       shoppingList.find(
-    //         (listItem) =>
-    //           listItem.ingredient.id === item.ingredient.id && !listItem.onList
-    //       )
-    //         ? { ...item, onList: true }
-    //         : item
-    //     )
-    //     .filter((item) => item.onList);
-    //   console.log("to add:", itemsNotInList);
-    //   setShoppingList([
-    //     ...shoppingList.filter((item) => item.onList),
-    //     ...itemsNotInList,
-    //   ]);
-
-    //   setRecipes(
-    //     recipes.map((recipe) =>
-    //       recipe.id === items.id ? { ...recipe, onList: true } : recipe
-    //     )
-    //   );
-    // } else {
-    //   setShoppingList([...shoppingList, items.ingredients]);
-    // }
     console.log("Ich werde etwas zur Liste adden :)");
   }
 

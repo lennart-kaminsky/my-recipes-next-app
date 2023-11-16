@@ -7,7 +7,8 @@ import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
 import { CircleLink } from "@/components/Link";
 
-import { kebabCase, handleAddRecipe } from "@/utils";
+import { kebabCase } from "@/utils";
+import { addRecipe } from "@/utils/addRecipe";
 
 export default function NewRecipe() {
   const [newIngredients, setNewIngredients] = useState([]);
@@ -134,7 +135,7 @@ export default function NewRecipe() {
       preparation: formElements.preparationInput.value,
     };
 
-    handleAddRecipe(newRecipe);
+    addRecipe(newRecipe);
     setIsLoading(false);
     router.push("/recipes");
   }
