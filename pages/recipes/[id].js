@@ -1,23 +1,21 @@
-import { useEffect, useState } from "react";
-
-import { useRouter } from "next/router";
-import Image from "next/image";
+import styled from "styled-components";
+import { ChangeButton, CircleButton } from "@/components/Button";
+import { CircleLink } from "@/components/Link";
+import { StyledHeadlineOne } from "@/components/StyledText";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import styled from "styled-components";
-import { ChangeButton } from "@/components/Button";
-import { CircleLink } from "@/components/Link";
-import { StyledHeadlineOne } from "@/components/StyledText";
-
 import Ingredients from "@/components/Ingredients";
+
+import { useEffect, useState } from "react";
+
+import Image from "next/image";
+import { useRouter } from "next/router";
+
 import useSWR from "swr";
 
-export default function RecipeDetails({
-  handleToggleFavorite,
-  handleAddToList,
-}) {
+export default function RecipeDetails({ handleAddToList }) {
   const [display, setDisplay] = useState(true);
 
   const router = useRouter();
@@ -74,17 +72,15 @@ export default function RecipeDetails({
             Preperation
           </ChangeButton>
         </ChangeButtonContainer>
-        <CircleLink $isCancel href="/recipes">
+        <CircleButton onClick={() => router.back()}>
           <FontAwesomeIcon icon={faTimes} />
-        </CircleLink>
+        </CircleButton>
       </RelativeContainer>
       {display ? (
         <Ingredients
           portions={portions}
-          recipe={recipe}
           handleDecrementPortion={handleDecrementPortion}
           handleIncrementPortion={handleIncrementPortion}
-          onToggleFavorite={handleToggleFavorite}
           onAddToList={handleAddToList}
         />
       ) : (

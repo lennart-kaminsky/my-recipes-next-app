@@ -1,5 +1,6 @@
 import RecipeWrapper from "@/components/RecipeWrapper";
 import { StyledHeadlineTwo } from "@/components/StyledText";
+import styled from "styled-components";
 
 export default function HomePage({ recipes }) {
   // const favoriteRecipes = recipes.filter((recipe) => recipe.isFavorite);
@@ -54,8 +55,12 @@ export default function HomePage({ recipes }) {
   // addProductAndRecipe();
   return (
     <main>
-      <StyledHeadlineTwo>Your Favorite Recipes</StyledHeadlineTwo>
-      {/* <RecipeWrapper recipes={favoriteRecipes}></RecipeWrapper> */}
+      <StyledHeadlineTwoMargin>Your Favorite Recipes</StyledHeadlineTwoMargin>
+      <RecipeWrapper favoriteRecipes></RecipeWrapper>
     </main>
   );
 }
+
+const StyledHeadlineTwoMargin = styled(StyledHeadlineTwo)`
+  margin-inline: 5%;
+`;

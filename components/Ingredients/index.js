@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+import { TagContainer } from "../TagContainer";
+import { StyledHeadlineTwo } from "../StyledText";
+import { FlexRowWrapper } from "../Wrapper";
+import { PortionsButton } from "../Button";
+import { TableIngredients } from "../Table";
+import { RecipeForm } from "../RecipeForm";
+
+import { addToList } from "@/utils/addToList";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartShopping,
@@ -9,33 +18,26 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { TagContainer } from "../TagContainer";
-import { StyledHeadlineTwo } from "../StyledText";
-import { FlexRowWrapper } from "../Wrapper";
-import { PortionsButton } from "../Button";
-import { TableIngredients } from "../Table";
-
 import { useState } from "react";
-import { RecipeForm } from "../RecipeForm";
-
-import { addToList } from "@/utils/addToList";
-import useSWR from "swr";
 import { useRouter } from "next/router";
+import useSWR from "swr";
 
 export default function Ingredients({
   portions,
-  // recipe,
   handleDecrementPortion,
   handleIncrementPortion,
-  //onToggleFavorite,
 }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  const {
+    data: recipe,
+    isLoadingRecipe,
+    mutate,
+  } = useSWR(`/api/recipes/${id}`);
   const { data: currentShoppinglist } = useSWR("/api/shoppinglists/current");
-  const { data: recipe, isLoadingRecipe } = useSWR(`/api/recipes/${id}`);
 
+  const [isEditMode, setIsEditMode] = useState(false);
   if (isLoadingRecipe) return <p>loading...</p>;
 
   async function toggleFavorite() {
@@ -46,6 +48,7 @@ export default function Ingredients({
       },
       body: JSON.stringify({ ...recipe, isFavorite: !recipe.isFavorite }),
     });
+    mutate();
   }
 
   return (
@@ -88,6 +91,7 @@ export default function Ingredients({
             <FontAwesomeIcon icon={faEllipsis} />
           </PortionsButton>
         </FlexRowWrapper>
+
         {isEditMode && <RecipeForm></RecipeForm>}
         <StyledHeadlineTwo>Groceries</StyledHeadlineTwo>
         <TableIngredients portions={portions} recipe={recipe} />

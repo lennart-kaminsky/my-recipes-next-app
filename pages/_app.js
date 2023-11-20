@@ -50,10 +50,6 @@ export default function App({ Component, pageProps }) {
     }
   }
 
-  function handleToggleFavorite(id) {
-    console.log("Ich werde isFavorite togglen :)");
-  }
-
   return (
     <>
       <GlobalStyle />
@@ -63,7 +59,6 @@ export default function App({ Component, pageProps }) {
           {...pageProps}
           shoppingList={shoppingList}
           shoppingHistory={shoppingHistory}
-          handleToggleFavorite={handleToggleFavorite}
           handleAddToList={handleAddToList}
           handleToggleOnList={handleToggleOnList}
           handleRemoveFromList={handleRemoveFromList}

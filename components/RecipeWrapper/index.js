@@ -1,18 +1,22 @@
-import Image from "next/image";
-
 import styled from "styled-components";
+import Image from "next/image";
 import { StyledLink } from "../Link";
+
 import useSWR from "swr";
 
-export default function RecipeWrapper() {
+export default function RecipeWrapper({ favoriteRecipes }) {
   const { data: recipes, isLoading, error } = useSWR("/api/recipes");
 
   if (isLoading) return <h1>is loading...</h1>;
-  if (error) return <h1>failed to get data...</h1>;
+  if (error) return <h1>failed to load data...</h1>;
+
+  const filteredRecipes = favoriteRecipes
+    ? recipes.filter((recipe) => recipe.isFavorite)
+    : recipes;
 
   return (
     <RecipeContainer>
-      {recipes.map((recipe) => (
+      {filteredRecipes.map((recipe) => (
         <RecipeCard key={recipe._id}>
           <StyledLink href={`/recipes/${recipe._id}`}>
             <CardHeadline>{recipe.name}</CardHeadline>

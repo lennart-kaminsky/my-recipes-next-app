@@ -72,7 +72,6 @@ export default createGlobalStyle`
   main {
     grid-area: main;
     overflow: auto;
-    /* margin-inline: 1rem; */
   }
 
   nav {
