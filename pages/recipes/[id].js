@@ -47,56 +47,54 @@ export default function RecipeDetails({
   }
 
   return (
-    <>
-      <main>
-        <RelativeContainer>
-          <ShadowContainer>
-            <StyledHeadlineOne $isRecipeDetail>{recipe.name}</StyledHeadlineOne>
-          </ShadowContainer>
-          <DetailsImage
-            src={recipe.image}
-            alt={recipe.name}
-            width={1080}
-            height={1080}
-            priority={true}
-          ></DetailsImage>
-          <ChangeButtonContainer>
-            <ChangeButton
-              left
-              display={display}
-              onChangeDisplay={handleChangeDisplay}
-            >
-              Ingredients
-            </ChangeButton>
-            <ChangeButton
-              display={!display}
-              onChangeDisplay={handleChangeDisplay}
-            >
-              Preperation
-            </ChangeButton>
-          </ChangeButtonContainer>
-          <CircleLink $isCancel href="/recipes">
-            <FontAwesomeIcon icon={faTimes} />
-          </CircleLink>
-        </RelativeContainer>
-        {display ? (
-          <Ingredients
-            portions={portions}
-            recipe={recipe}
-            handleDecrementPortion={handleDecrementPortion}
-            handleIncrementPortion={handleIncrementPortion}
-            onToggleFavorite={handleToggleFavorite}
-            onAddToList={handleAddToList}
-          />
-        ) : (
-          <StyledPreparation>
-            {recipe.preparation
-              ? recipe.preparation
-              : "No Preparation added yet 😾"}
-          </StyledPreparation>
-        )}
-      </main>
-    </>
+    <main>
+      <RelativeContainer>
+        <ShadowContainer>
+          <StyledHeadlineOne $isRecipeDetail>{recipe.name}</StyledHeadlineOne>
+        </ShadowContainer>
+        <DetailsImage
+          src={recipe.image}
+          alt={recipe.name}
+          width={1080}
+          height={1080}
+          priority={true}
+        ></DetailsImage>
+        <ChangeButtonContainer>
+          <ChangeButton
+            left
+            display={display}
+            onChangeDisplay={handleChangeDisplay}
+          >
+            Ingredients
+          </ChangeButton>
+          <ChangeButton
+            display={!display}
+            onChangeDisplay={handleChangeDisplay}
+          >
+            Preperation
+          </ChangeButton>
+        </ChangeButtonContainer>
+        <CircleLink $isCancel href="/recipes">
+          <FontAwesomeIcon icon={faTimes} />
+        </CircleLink>
+      </RelativeContainer>
+      {display ? (
+        <Ingredients
+          portions={portions}
+          recipe={recipe}
+          handleDecrementPortion={handleDecrementPortion}
+          handleIncrementPortion={handleIncrementPortion}
+          onToggleFavorite={handleToggleFavorite}
+          onAddToList={handleAddToList}
+        />
+      ) : (
+        <StyledPreparation>
+          {recipe.preparation
+            ? recipe.preparation
+            : "No Preparation added yet 😾"}
+        </StyledPreparation>
+      )}
+    </main>
   );
 }
 

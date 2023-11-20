@@ -20,17 +20,33 @@ import { RecipeForm } from "../RecipeForm";
 
 import { addToList } from "@/utils/addToList";
 import useSWR from "swr";
+import { useRouter } from "next/router";
 
 export default function Ingredients({
   portions,
-  recipe,
+  // recipe,
   handleDecrementPortion,
   handleIncrementPortion,
-  onToggleFavorite,
+  //onToggleFavorite,
 }) {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [isEditMode, setIsEditMode] = useState(false);
   const { data: currentShoppinglist } = useSWR("/api/shoppinglists/current");
-  // const { data: historyShoppinglist } = useSWR("/api/shoppinglists/history");
+  const { data: recipe, isLoadingRecipe } = useSWR(`/api/recipes/${id}`);
+
+  if (isLoadingRecipe) return <p>loading...</p>;
+
+  async function toggleFavorite() {
+    const response = await fetch(`/api/recipes/${recipe._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...recipe, isFavorite: !recipe.isFavorite }),
+    });
+  }
 
   return (
     <>
@@ -60,7 +76,7 @@ export default function Ingredients({
             $single
             $isHighlighted={!recipe.isFavorite}
             type="button"
-            onClick={() => onToggleFavorite(recipe._id)}
+            onClick={() => toggleFavorite()}
           >
             <FontAwesomeIcon icon={faHeart} />
           </PortionsButton>
