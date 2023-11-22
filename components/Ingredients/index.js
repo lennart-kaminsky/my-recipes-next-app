@@ -71,7 +71,7 @@ export default function Ingredients({
             $single
             $isHighlighted={!recipe.onList}
             type="button"
-            onClick={() => addToList(recipe, currentShoppinglist)}
+            onClick={() => addToList(recipe, currentShoppinglist, portions)}
           >
             <FontAwesomeIcon icon={faCartShopping} />
           </PortionsButton>

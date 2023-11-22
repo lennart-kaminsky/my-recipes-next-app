@@ -4,3 +4,8 @@ export function kebabCase(string) {
     .join("-")
     .toLowerCase();
 }
+
+export function checkDecimal(number) {
+  if (number % 1 != 0) return number.toFixed(1);
+  return number.toFixed(0);
+}

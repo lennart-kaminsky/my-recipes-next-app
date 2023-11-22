@@ -43,7 +43,6 @@ export default function RecipeDetails({ handleAddToList }) {
   function handleIncrementPortion() {
     setPortions(portions + 1);
   }
-
   return (
     <main>
       <RelativeContainer>

@@ -12,7 +12,6 @@ export default function ListInput() {
   } = useSWR("api/shoppinglists/current");
 
   if (isLoading) return;
-  console.log("Achtung: ", shoppingList);
 
   async function addProductToList(event) {
     event.preventDefault();

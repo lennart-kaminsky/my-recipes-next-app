@@ -1,8 +1,19 @@
-export async function addToList(recipe, currentList) {
+import { checkDecimal } from ".";
+
+export async function addToList(recipe, currentList, portions) {
   try {
+    const updatedRecipeProducts = recipe.products.map((product) => ({
+      ...product,
+      amount: checkDecimal(
+        Number.parseFloat((portions * product.amount) / recipe.portions)
+      ),
+    }));
+
+    console.log(updatedRecipeProducts);
+
     const updatedCurrentList = {
       ...currentList,
-      products: [...currentList.products, ...recipe.products],
+      products: [...currentList.products, ...updatedRecipeProducts],
     };
 
     const updatedCurrentListResponse = await fetch(

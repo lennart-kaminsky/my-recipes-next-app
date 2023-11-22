@@ -3,8 +3,10 @@ import { ButtonNoStyle } from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
+import { uid } from "uid";
+import removeFromList from "@/utils/removeFromList";
 
-export function ShoppingList({ listType, onChange, handleRemoveFromList }) {
+export function ShoppingList({ listType, onChange }) {
   const oppositeListType = listType === "current" ? "history" : "current";
 
   const {
@@ -41,7 +43,7 @@ export function ShoppingList({ listType, onChange, handleRemoveFromList }) {
     <StyledShoppingList>
       {shoppinglist.products.map((product) => (
         <StyledShoppingListItem
-          key={product.product}
+          key={uid()}
           $border={
             shoppinglist.products.indexOf(product) < shoppinglist.products - 1
           }
@@ -72,7 +74,10 @@ export function ShoppingList({ listType, onChange, handleRemoveFromList }) {
                   <StyledCheckboxSpan></StyledCheckboxSpan>
                   {listType === "history" && (
                     <ButtonNoStyle
-                      onClick={() => handleRemoveFromList(product._id)}
+                      onClick={() => {
+                        removeFromList(product._id, shoppinglist);
+                        mutateCurrent();
+                      }}
                     >
                       <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
                     </ButtonNoStyle>

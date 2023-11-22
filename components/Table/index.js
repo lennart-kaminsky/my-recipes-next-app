@@ -1,11 +1,7 @@
 import { Fragment } from "react";
 import styled from "styled-components";
 import useSWR from "swr";
-
-function checkDecimal(number) {
-  if (number % 1 != 0) return number.toFixed(1);
-  return number.toFixed(0);
-}
+import { checkDecimal } from "@/utils";
 
 export function TableIngredients({ recipe, portions }) {
   const { data: products, isLoading, error } = useSWR("/api/products");
