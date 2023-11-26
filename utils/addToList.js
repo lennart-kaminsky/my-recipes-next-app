@@ -1,27 +1,44 @@
 import { checkDecimal } from ".";
 
-// export async function addProductToList(product, amount, currentList) {
-//   try {
-//     const updatedCurrentListResponse = await fetch(
-//       "/api/shoppinglists/current",
-//       {
-//         method: "PUT",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(updatedCurrentList),
-//       }
-//     );
-//     if (updatedCurrentListResponse.ok) {
-//       console.log("Shopping list successfully updated.");
-//     } else {
-//       console.log(
-//         "Error updating shopping list:",
-//         updatedCurrentListResponse.status
-//       );
-//     }
-//   } catch (error) {}
-// }
+export async function addProductToList(product, list) {
+  try {
+    const productOnList = list.products.find(
+      (listProduct) => listProduct.product === product.product
+    );
+
+    const updatedProducts = productOnList
+      ? list.products.map((listProduct) =>
+          listProduct.product === product.product
+            ? {
+                ...listProduct,
+                amount: Number(listProduct.amount) + Number(product.amount),
+              }
+            : listProduct
+        )
+      : [product, ...list.products];
+
+    const updatedListResponse = await fetch(`/api/shoppinglists/${list.name}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...list, products: updatedProducts }),
+    });
+    if (updatedListResponse.ok) {
+      console.log(`${list.name} list successfully updated.`);
+    } else {
+      console.log(
+        `Error updating ${list.name} list:`,
+        updatedListResponse.status
+      );
+    }
+  } catch (error) {
+    console.error(
+      `Error adding ${product.name} to ${list.name} list.`,
+      error.message
+    );
+  }
+}
 
 export async function addToList(recipe, currentList, portions) {
   try {

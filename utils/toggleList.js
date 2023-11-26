@@ -1,3 +1,5 @@
+import { addProductToList } from "./addToList";
+
 export async function toggleList(
   productToRemove,
   currentList,
@@ -5,9 +7,9 @@ export async function toggleList(
   listType,
   mutateLists
 ) {
-  const oppositeListType = listType === "current" ? "history" : "current";
-
   try {
+    const oppositeListType = listType === "current" ? "history" : "current";
+
     const updatedProducts = currentList.products.filter(
       (product) => product._id !== productToRemove._id
     );
@@ -26,30 +28,35 @@ export async function toggleList(
       console.log(`Product successfully removed from ${listType} list.`);
     }
 
-    const updatedOppositeList = {
-      ...oppositeList,
-      products: [...oppositeList.products, productToRemove],
-    };
+    if (listType === "history") {
+      await addProductToList(productToRemove, oppositeList);
+      await mutateLists();
+    } else {
+      const updatedOppositeList = {
+        ...oppositeList,
+        products: [productToRemove, ...oppositeList.products],
+      };
 
-    const updatedOppositeListResponse = await fetch(
-      `/api/shoppinglists/${oppositeListType}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedOppositeList),
-      }
-    );
-    if (updatedOppositeListResponse.ok) {
-      console.log(
-        `Product successfully moved from ${listType} list to ${oppositeListType} list.`
+      const updatedOppositeListResponse = await fetch(
+        `/api/shoppinglists/${oppositeListType}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedOppositeList),
+        }
       );
+      if (updatedOppositeListResponse.ok) {
+        console.log(
+          `Product successfully moved from ${listType} list to ${oppositeListType} list.`
+        );
+      }
     }
     mutateLists();
   } catch (error) {
     console.error(
-      "Error moving product from shopping list to shopping history."
+      `Error moving ${productToRemove.name} from ${listType} list to ${oppositeListType} list.`
     );
   }
 }

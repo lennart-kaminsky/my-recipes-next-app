@@ -5,6 +5,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
 import { uid } from "uid";
 import removeFromList from "@/utils/removeFromList";
+import { toggleList } from "@/utils/toggleList";
 
 export function ShoppingList({ listType, onChange }) {
   const oppositeListType = listType === "current" ? "history" : "current";
@@ -41,6 +42,9 @@ export function ShoppingList({ listType, onChange }) {
 
   return (
     <StyledShoppingList>
+      {shoppinglist.products.length <= 0 && (
+        <p>No products on your shopping list.</p>
+      )}
       {shoppinglist.products.map((product) => (
         <StyledShoppingListItem
           key={uid()}
@@ -53,15 +57,15 @@ export function ShoppingList({ listType, onChange }) {
               _product._id === product.product && (
                 <StyledLabel
                   key={_product._id}
-                  htmlFor={`checkbox${_product._id}`}
+                  htmlFor={`checkbox${_product._id + listType}`}
                 >
                   {product.amount + _product.unit + " " + _product.name}
                   <StyledCheckbox
-                    id={`checkbox${_product._id}`}
-                    name={`checkbox${_product._id}`}
+                    id={`checkbox${_product._id + listType}`}
+                    name={`checkbox${_product._id + listType}`}
                     type="checkbox"
                     onChange={() =>
-                      onChange(
+                      toggleList(
                         product,
                         shoppinglist,
                         oppositeShoppingList,
@@ -74,8 +78,8 @@ export function ShoppingList({ listType, onChange }) {
                   <StyledCheckboxSpan></StyledCheckboxSpan>
                   {listType === "history" && (
                     <ButtonNoStyle
-                      onClick={() => {
-                        removeFromList(product._id, shoppinglist);
+                      onClick={async () => {
+                        await removeFromList(product._id, shoppinglist);
                         mutateCurrent();
                       }}
                     >
@@ -95,6 +99,7 @@ const StyledShoppingList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 50%;
 `;
 
 const StyledShoppingListItem = styled.li`
