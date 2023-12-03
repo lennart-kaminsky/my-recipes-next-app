@@ -6,11 +6,8 @@ const openai = new OpenAI({
 
 export default async function handler(request, response) {
   const { content } = request.query;
-  console.log("content: ", content);
   const newPrompt = content.replace(/-/g, " ");
-  console.log("newPrompt", newPrompt);
   const aiImage = await generateImage(newPrompt);
-  console.log("Image", aiImage);
   response.status(200).json(aiImage);
 }
 
