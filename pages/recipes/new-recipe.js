@@ -7,7 +7,10 @@ import { TagContainer } from "@/components/TagContainer";
 import { useRouter } from "next/router";
 import { CircleLink } from "@/components/Link";
 
-export default function NewRecipe({ handleAddRecipe }) {
+import { kebabCase } from "@/utils";
+import { addRecipe } from "@/utils/addRecipe";
+
+export default function NewRecipe() {
   const [newIngredients, setNewIngredients] = useState([]);
   const [currentIngredient, setCurrentIngredient] = useState({
     amount: "",
@@ -50,15 +53,26 @@ export default function NewRecipe({ handleAddRecipe }) {
 
   function handleAddSpice() {
     if (!currentSpice) return null;
-    setNewSpices([...newSpices, { id: uid(), name: currentSpice }]);
+    setNewSpices([...newSpices, { name: currentSpice }]);
     setCurrentSpice("");
   }
 
   function handleAddSauce() {
     if (!currentSauce) return null;
-    setNewSauces([...newSauces, { id: uid(), name: currentSauce }]);
+    setNewSauces([...newSauces, { name: currentSauce }]);
     setCurrentSauce("");
   }
+  // function handleAddSpice() {
+  //   if (!currentSpice) return null;
+  //   setNewSpices([...newSpices, { id: uid(), name: currentSpice }]);
+  //   setCurrentSpice("");
+  // }
+
+  // function handleAddSauce() {
+  //   if (!currentSauce) return null;
+  //   setNewSauces([...newSauces, { id: uid(), name: currentSauce }]);
+  //   setCurrentSauce("");
+  // }
 
   function handleRemoveIngredient(id) {
     setNewIngredients(
@@ -81,51 +95,51 @@ export default function NewRecipe({ handleAddRecipe }) {
     const formElements = event.target.elements;
     const recipeName = formElements.recipeNameInput.value;
 
+    //fetch and generate image form openAi
     const response = await fetch(`/api/image/${kebabCase(recipeName)}`);
-    const data = await response.json();
-
-    console.log(data);
+    let aiImage = "";
+    if (response.ok) {
+      try {
+        const data = await response.json();
+        aiImage = data.data[0].url;
+        console.log(data);
+      } catch (error) {
+        console.error(
+          "Response was ok, but failed to generate an image.",
+          error
+        );
+      }
+    } else {
+      console.error("Failed to generate image. Use default image now");
+      aiImage =
+        "https://biancazapatka.com/wp-content/uploads/2023/02/chocolate-chip-cookies-720x1008.jpg";
+    }
 
     const newRecipe = {
-      id: uid(),
       name: recipeName,
-      slug: kebabCase(recipeName),
-      image: {
-        src: data.data[0].url,
-      },
+      image: aiImage,
       portions: Number(formElements.portionsInput.value),
-      ingredients: newIngredients.map((ingredient) => {
+      isFavorite: false,
+      onList: false,
+      products: newIngredients.map((ingredient) => {
         return {
           amount: Number(ingredient.amount),
-          ingredient: {
-            id: ingredient.id,
+          product: {
             name: ingredient.name,
             unit: ingredient.unit,
           },
         };
       }),
-      isFavorite: false,
       spices: newSpices,
       sauces: newSauces,
-      preperation: formElements.preperationInput.value,
+      preparation: formElements.preparationInput.value,
     };
-    console.log("neues Rezept", newRecipe);
-    console.log("neues Zutatetb", newIngredients);
 
-    handleAddRecipe(newRecipe);
-
+    addRecipe(newRecipe);
     setIsLoading(false);
     router.push("/recipes");
   }
 
-  function kebabCase(string) {
-    return string
-      .match(
-        /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-      )
-      .join("-")
-      .toLowerCase();
-  }
   return (
     <main>
       {isLoading ? (
@@ -212,16 +226,16 @@ export default function NewRecipe({ handleAddRecipe }) {
               </button>
             </fieldset>
             <fieldset>
-              <label htmlFor="preperationInput">Preperation</label>
+              <label htmlFor="preparationInput">Preparation</label>
               <textarea
-                id="preperationInput"
-                name="preperationInput"
+                id="preparationInput"
+                name="preparationInput"
               ></textarea>
             </fieldset>
             <button type="submit">Submit</button>
           </form>
-          <TagContainer tag={newSpices} onRemove={handleRemoveSpice} isEdit />
-          <TagContainer tag={newSauces} onRemove={handleRemoveSauce} isEdit />
+          <TagContainer tags={newSpices} onRemove={handleRemoveSpice} isEdit />
+          <TagContainer tags={newSauces} onRemove={handleRemoveSauce} isEdit />
           <table>
             <StyledTableBody>
               {newIngredients.map((ingredient) => (

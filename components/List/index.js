@@ -2,42 +2,95 @@ import styled from "styled-components";
 import { ButtonNoStyle } from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import useSWR from "swr";
+import { uid } from "uid";
+import removeFromList from "@/utils/removeFromList";
+import { toggleList } from "@/utils/toggleList";
 
-export function ShoppingList({
-  shoppingList,
-  onList,
-  onToggleOnList,
-  handleRemoveFromList,
-}) {
+export function ShoppingList({ listType, onChange }) {
+  const oppositeListType = listType === "current" ? "history" : "current";
+
+  const {
+    data: shoppinglist,
+    isLoading: isLoadingCurrentList,
+    error: errorCurrentList,
+    mutate: mutateCurrent,
+  } = useSWR(`/api/shoppinglists/${listType}`);
+
+  const {
+    data: oppositeShoppingList,
+    isLoading: isLoadingOppositeList,
+    error: errorOppositeList,
+    mutate: mutateOpposite,
+  } = useSWR(`/api/shoppinglists/${oppositeListType}`);
+
+  const {
+    data: products,
+    isLoading: isLoadingProducts,
+    error: errorProducts,
+  } = useSWR("/api/products");
+
+  if (isLoadingCurrentList || isLoadingOppositeList || isLoadingProducts)
+    return <p>loading shopping list, history and products...</p>;
+  if (errorCurrentList || errorOppositeList || errorProducts)
+    return <p>error loading shopping list or products.</p>;
+
+  function mutateLists() {
+    mutateCurrent();
+    mutateOpposite();
+  }
+
   return (
     <StyledShoppingList>
-      {shoppingList
-        .filter((item) => item.onList)
-        .map((item) => (
-          <StyledShoppingListItem
-            key={item.ingredient.id}
-            $border={shoppingList.indexOf(item) < shoppingList.length - 1}
-          >
-            <StyledLabel htmlFor={`checkbox${item.ingredient.id}`}>
-              {item.amount + item.ingredient.unit + " " + item.ingredient.name}
-              <StyledCheckbox
-                id={`checkbox${item.ingredient.id}`}
-                name={`checkbox${item.ingredient.id}`}
-                type="checkbox"
-                onChange={() => onToggleOnList(item.ingredient.id)}
-                checked={onList}
-              />
-              <StyledCheckboxSpan></StyledCheckboxSpan>
-            </StyledLabel>
-            {onList && (
-              <ButtonNoStyle
-                onClick={() => handleRemoveFromList(item.ingredient.id)}
-              >
-                <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-              </ButtonNoStyle>
-            )}
-          </StyledShoppingListItem>
-        ))}
+      {shoppinglist.products.length <= 0 && (
+        <p>No products on your shopping list.</p>
+      )}
+      {shoppinglist.products.map((product) => (
+        <StyledShoppingListItem
+          key={uid()}
+          $border={
+            shoppinglist.products.indexOf(product) < shoppinglist.products - 1
+          }
+        >
+          {products.map(
+            (_product) =>
+              _product._id === product.product && (
+                <StyledLabel
+                  key={_product._id}
+                  htmlFor={`checkbox${_product._id + listType}`}
+                >
+                  {product.amount + _product.unit + " " + _product.name}
+                  <StyledCheckbox
+                    id={`checkbox${_product._id + listType}`}
+                    name={`checkbox${_product._id + listType}`}
+                    type="checkbox"
+                    onChange={() =>
+                      toggleList(
+                        product,
+                        shoppinglist,
+                        oppositeShoppingList,
+                        listType,
+                        mutateLists
+                      )
+                    }
+                    checked={listType === "history"}
+                  />
+                  <StyledCheckboxSpan></StyledCheckboxSpan>
+                  {listType === "history" && (
+                    <ButtonNoStyle
+                      onClick={async () => {
+                        await removeFromList(product._id, shoppinglist);
+                        mutateCurrent();
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                    </ButtonNoStyle>
+                  )}
+                </StyledLabel>
+              )
+          )}
+        </StyledShoppingListItem>
+      ))}
     </StyledShoppingList>
   );
 }
@@ -46,6 +99,7 @@ const StyledShoppingList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 50%;
 `;
 
 const StyledShoppingListItem = styled.li`

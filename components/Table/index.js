@@ -1,28 +1,38 @@
+import { Fragment } from "react";
 import styled from "styled-components";
-
-function checkDecimal(number) {
-  if (number % 1 != 0) return number.toFixed(1);
-  return number.toFixed(0);
-}
+import useSWR from "swr";
+import { checkDecimal } from "@/utils";
 
 export function TableIngredients({ recipe, portions }) {
+  const { data: products, isLoading, error } = useSWR("/api/products");
+  if (isLoading) return <h1>loading...</h1>;
+  if (error) return <h1>failed loading data...</h1>;
   return (
     <StyledTable>
       <tbody>
-        {recipe.ingredients.map((item) => (
+        {recipe.products.map((product) => (
           <StyledTableRow
-            key={item.id}
-            $paddingTop={recipe.ingredients.indexOf(item) === 0}
+            key={product._id}
+            $paddingTop={recipe.products.indexOf(product) === 0}
             $border={
-              recipe.ingredients.indexOf(item) < recipe.ingredients.length - 1
+              recipe.products.indexOf(product) < recipe.products.length - 1
             }
           >
-            <td>{item.ingredient.name}</td>
-            <RightTD>
-              {checkDecimal(
-                Number.parseFloat((portions * item.amount) / recipe.portions)
-              ) + item.ingredient.unit}
-            </RightTD>
+            {products.map(
+              (_product) =>
+                _product._id === product.product && (
+                  <Fragment key={_product._id}>
+                    <td>{_product.name}</td>
+                    <RightTD>
+                      {checkDecimal(
+                        Number.parseFloat(
+                          (portions * product.amount) / recipe.portions
+                        )
+                      ) + _product.unit}
+                    </RightTD>
+                  </Fragment>
+                )
+            )}
           </StyledTableRow>
         ))}
       </tbody>

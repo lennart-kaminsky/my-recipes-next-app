@@ -16,7 +16,7 @@ const recipeSchema = new Schema({
   products: [productAmountSchema],
   spices: { type: [Schema.Types.ObjectId], ref: "Product" },
   sauces: { type: [Schema.Types.ObjectId], ref: "Product" },
-  preperation: { type: String },
+  preparation: { type: String },
 });
 
 const Recipe = mongoose.models.Recipe || mongoose.model("Recipe", recipeSchema);

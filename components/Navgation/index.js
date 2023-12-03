@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
   faBurger,
-  faToiletPaper,
   faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,11 +20,6 @@ export default function Navigation({ currentPage }) {
         <li>
           <StyledLink $current={currentPage === "/recipes"} href="/recipes">
             <FontAwesomeIcon icon={faBurger} />
-          </StyledLink>
-        </li>
-        <li>
-          <StyledLink $current={currentPage === "/drugstore"} href="/drugstore">
-            <FontAwesomeIcon icon={faToiletPaper} />
           </StyledLink>
         </li>
         <li>

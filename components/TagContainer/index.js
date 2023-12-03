@@ -2,22 +2,32 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ButtonNoStyle } from "../Button";
+import useSWR from "swr";
 
-export function TagContainer({ tag, onRemove, isEdit }) {
+export function TagContainer({ tags, onRemove, isEdit }) {
+  const { data: products, isLoading, error } = useSWR("/api/products");
+  // const currentProduct = products.map((product) => product._id === tag);
+  if (isLoading) return <p>is laoding...</p>;
+  if (error) return <p>failed loading data</p>;
   return (
     <StyledTagContainer>
-      {tag.map((tag) => (
-        <Tag key={tag.id}>
-          {tag.name}
-          {isEdit ? (
-            <ButtonNoStyle onClick={() => onRemove(tag.id)}>
-              <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
-            </ButtonNoStyle>
-          ) : (
-            <></>
-          )}
-        </Tag>
-      ))}
+      {tags.map((tag) =>
+        products.map(
+          (product) =>
+            product._id === tag && (
+              <Tag key={tag}>
+                {product.name}
+                {isEdit ? (
+                  <ButtonNoStyle onClick={() => onRemove(tag.id)}>
+                    <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+                  </ButtonNoStyle>
+                ) : (
+                  <></>
+                )}
+              </Tag>
+            )
+        )
+      )}
     </StyledTagContainer>
   );
 }

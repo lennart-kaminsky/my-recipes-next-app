@@ -37,6 +37,24 @@ export function ButtonNoStyle({ children, onClick }) {
   return <ButtonNotStyled onClick={onClick}>{children}</ButtonNotStyled>;
 }
 
+export function CircleButton({ children, onClick }) {
+  return <StyledCircleButton onClick={onClick}>{children}</StyledCircleButton>;
+}
+
+const StyledCircleButton = styled.button`
+  color: var(--secondary-bg-color);
+  font-size: 1.5rem;
+  background-color: var(--secondary-color);
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 100%;
+  position: absolute;
+  padding: 0.25rem 0.7rem;
+  top: 1.5rem;
+  right: 1.5rem;
+`;
+
 const StyledChangeButton = styled.button`
   width: 50%;
   padding: 15px 0;
